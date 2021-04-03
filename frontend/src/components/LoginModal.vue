@@ -15,7 +15,12 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">...</div>
+        <div class="modal-body">
+          <label class="inputLabel">ชื่อผู้ใช้</label>
+          <input class="inputBox form-control" placeholder />
+          <label class="inputLabel">รหัสผ่าน</label>
+          <input class="inputBox form-control" placeholder />
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary">Save changes</button>
