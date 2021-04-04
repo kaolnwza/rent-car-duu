@@ -6,10 +6,10 @@
         <div class="col-4" style="text-align: center">
           <button class="btn btn-danger" @click="$router.push('/userprofile')">Profile LINK test</button>
 
-          <button class="btn btn-danger" @click="testLogedIn()">Loged in test</button>
+          <button class="btn btn-danger" @click="testLogedIn()">Toggle Loged in</button>
         </div>
         <div class="col-4 mt-2" style="text-align: right">
-          <div v-if="logedIn">
+          <div v-if="!logedIn">
             <label
               class="login btn btn-primary mr-3"
               data-toggle="modal"
@@ -22,6 +22,18 @@
               data-target="#registerModal"
             >สร้างบัญชีผู้ใช้</label>
           </div>
+          <button v-else class="btn btn-outline-primary userLogo">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              class="bi bi-person-fill"
+              viewBox="0 0 16 16"
+            >
+              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -94,6 +106,11 @@ export default {
 .navbarProp {
   -webkit-box-shadow: 0px -1px 20px -12px rgba(0, 0, 0, 0.75);
   height: 60px;
+}
+
+.userLogo {
+  margin-right: 20px;
+  margin-bottom: 7px;
 }
 </style>
 

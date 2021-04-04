@@ -28,6 +28,10 @@
           <input class="inputBox form-control" placeholder="ex. อุซุมากิ" />
           <label class="inputLabel">นามสกุล</label>
           <input class="inputBox form-control" placeholder="ex. นารูโตะ" />
+          <label class="inputLabel">อีเมล</label>
+          <input class="inputBox form-control" placeholder="ex. naruto500@hotmail.com" />
+          <label class="inputLabel">เบอร์โทรศัพท์</label>
+          <input class="inputBox form-control" placeholder="ex. 092xxxxxxx" />
           <label class="inputLabel">อายุ</label>
           <input class="inputBox form-control" placeholder="ex. 69" />
           <label class="inputLabel">วัน เดือน ปีเกิด</label>
