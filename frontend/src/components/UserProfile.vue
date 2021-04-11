@@ -28,6 +28,9 @@
               <div class="col-6">
                 <button class="btn btn-outline-primary">ข้อมูลผู้ให้เช่า</button>
               </div>
+              <div class="col-6">
+                <button class="btn btn-outline-primary" @click="$router.push('/history')">ประวัติ</button>
+              </div>
             </div>
           </div>
         </div>

@@ -4,8 +4,6 @@
       <div class="collapse navbar-collapse row" id="navbarText">
         <div class="logo col-4" style="text-align:left" @click="$router.push('/')">ส่งพี่ไปเช่ารถดู๊</div>
         <div class="col-4" style="text-align: center">
-          <button class="btn btn-danger" @click="$router.push('/userprofile')">Profile LINK test</button>
-
           <button class="btn btn-danger" @click="testLogedIn()">Toggle Loged in</button>
         </div>
         <div class="col-4 mt-2" style="text-align: right">

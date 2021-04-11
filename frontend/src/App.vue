@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="m-0">
     <Navbar />
-    <div class="container">
+    <div class="container mt-4">
       <LoginModal />
       <RegisterModal />
       <router-view></router-view>
