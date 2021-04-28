@@ -4,6 +4,9 @@
     <div class="container mt-4">
       <LoginModal />
       <RegisterModal />
+      <!--<CarDetailModal /> -->
+      <!-- <ViewUserProfile /> -->
+      <RentCar />
       <router-view></router-view>
     </div>
   </div>
@@ -13,13 +16,19 @@
 import Navbar from "./components/Navbar.vue";
 import LoginModal from "./components/LoginModal.vue";
 import RegisterModal from "./components/RegisterModal.vue";
+//import CarDetailModal from "./components/CarDetailModal.vue";
+//import ViewUserProfile from "./components/ViewUserProfile";
+import RentCar from "./components/RentCar";
 
 export default {
   name: "App",
   components: {
     Navbar,
     LoginModal,
-    RegisterModal
+    RegisterModal,
+    //CarDetailModal,
+    //ViewUserProfile,
+    RentCar
   },
   data() {
     return {

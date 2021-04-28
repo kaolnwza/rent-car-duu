@@ -6,7 +6,7 @@
         <div class="leftSide card">
           <img
             class="leftSide card-img-top rounded-circle"
-            src="../assets/images/naruto.jpeg"
+            src="../assets/images/user.png"
             alt="Card image cap"
           />
           <h5 class="leftSide card-title mt-3 mb-0">{{firstname + ' ' + lastname}}</h5>
@@ -21,15 +21,35 @@
 
         <div class="leftSideBottom card">
           <div class="leftSideBottom card-body">
+            <!--- -->
             <div class="row">
               <div class="col-6">
-                <button class="btn btn-outline-primary">ข้อมูลผู้เช่า</button>
+                <button
+                  class="btn btn-outline-info functionButton"
+                  @click="$router.push('/loanercarhistory')"
+                >ประวัติรถที่ให้เช่า</button>
+              </div>
+
+              <div class="col-6">
+                <button class="btn btn-outline-primary functionButton leftButton">รถที่ให้เช่า</button>
+              </div>
+
+              <!-- -->
+
+              <div class="col-6">
+                <button
+                  class="btn btn-outline-info functionButton"
+                  @click="$router.push('/loaneecarhistory')"
+                >ประวัติรถที่เช่า</button>
               </div>
               <div class="col-6">
-                <button class="btn btn-outline-primary">ข้อมูลผู้ให้เช่า</button>
+                <button class="btn btn-outline-primary functionButton leftButton">รถที่เช่า</button>
               </div>
               <div class="col-6">
-                <button class="btn btn-outline-primary" @click="$router.push('/history')">ประวัติ</button>
+                <button
+                  class="btn btn-outline-info functionButton"
+                  @click="$router.push('/paymenthistory')"
+                >ประวัติธุรกรรม</button>
               </div>
             </div>
           </div>
@@ -87,14 +107,14 @@
 export default {
   data() {
     return {
-      username: "narutoKonoha",
-      firstname: "Uzumaki",
-      lastname: "Naruto",
-      email: "narutoKonoha@konoha.com",
+      username: "username01",
+      firstname: "Firstname",
+      lastname: "Lastname",
+      email: "rentcar@admin.com",
       phone: "01212312",
       birthDate: "10/10/xxxx",
       sex: "ชาย",
-      address: "โคโนฮะคากุเระ"
+      address: "Bangkok, Thailand"
     };
   }
 };
@@ -115,10 +135,10 @@ export default {
 }
 
 .leftSideBottom.card {
-  margin-top: 20px;
-  padding-top: 20px;
+  margin-top: 10px;
+  padding-top: 0px;
   width: 300px;
-  height: 140px;
+  height: 150px;
 }
 
 .rightSide.card-title {
@@ -133,5 +153,15 @@ export default {
 }
 .profileLeftCol {
   padding-left: 30px;
+}
+.functionButton {
+  text-align: left;
+  width: 128px;
+
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+.leftButton {
+  width: 100px;
 }
 </style>

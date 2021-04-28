@@ -18,9 +18,9 @@
         <tbody>
           <tr>
             <td>1</td>
-            <td>Lamborghini</td>
-            <td>FUCK55</td>
-            <td>Prayuth JunOK</td>
+            <td>Tesla Model X</td>
+            <td>TA2011</td>
+            <td>User 2</td>
             <td>0924561234</td>
             <td>2000</td>
             <td>18/07/2021</td>
@@ -29,9 +29,9 @@
           </tr>
           <tr>
             <td>2</td>
-            <td>Mustang</td>
-            <td>FUCK55</td>
-            <td>Prayuth JunOK</td>
+            <td>Tesla Cybertruck</td>
+            <td>TA2022</td>
+            <td>User 2</td>
             <td>0924561234</td>
             <td>2000</td>
             <td>18/07/2021</td>

@@ -17,15 +17,73 @@
         </div>
         <div class="modal-body">
           <label class="inputLabel">ชื่อผู้ใช้</label>
-          <input class="inputBox form-control" placeholder />
+          <input
+            class="inputBox form-control"
+            v-model="username"
+            :class="{'is-invalid': !status}"
+            placeholder
+          />
           <label class="inputLabel">รหัสผ่าน</label>
-          <input class="inputBox form-control" placeholder />
+          <input
+            class="inputBox form-control"
+            v-model="password"
+            :class="{'is-invalid': !status}"
+            placeholder
+            type="password"
+          />
+          {{status}}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" ref="Close">Close</button>
+          <button type="button" class="btn btn-primary" @click="login()">Log in</button>
+          {{testToken}}
         </div>
       </div>
     </div>
   </div>
 </template>
+<script>
+import axios from "axios";
+export default {
+  data() {
+    return {
+      status: "NONE",
+
+      username: "phanuwat",
+      password: "Ez1212312121",
+      testToken: ""
+    };
+  },
+  methods: {
+    login() {
+      let data = {
+        username: this.username,
+        password: this.password
+      };
+
+      axios
+        .post(`http://localhost:3000/user/login`, data)
+        .then(response => {
+          this.status = response.data.loginStatus;
+          if (this.status) {
+            this.getToken();
+          }
+        })
+        .catch(error => {
+          this.error = error.response.data.message;
+        });
+    },
+    getToken() {
+      let data = {
+        username: this.username
+      };
+      axios
+        .post(`http://localhost:3000/accessToken`, data)
+        .then(this.$router.push("/carmarketplace"), this.$refs.Close.click())
+        .catch(err => {
+          console.log(err.message);
+        });
+    }
+  }
+};
+</script>

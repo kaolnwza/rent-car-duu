@@ -2,23 +2,24 @@
   <nav class="navbar navbar-expand-lg bg-white text-dark navbarProp" style="background-color: grey">
     <div class="container">
       <div class="collapse navbar-collapse row" id="navbarText">
-        <div class="logo col-4" style="text-align:left" @click="$router.push('/')">ส่งพี่ไปเช่ารถดู๊</div>
-        <div class="col-4" style="text-align: center">
-          <button class="btn btn-danger" @click="testLogedIn()">Toggle Loged in</button>
-        </div>
-        <div class="col-4 mt-2" style="text-align: right">
-          <div v-if="!logedIn">
+        <div
+          class="logo col-3 pl-4"
+          style="text-align:left"
+          @click="$router.push('/')"
+        >ส่งพี่ไปเช่ารถดู๊</div>
+        <div class="col-5 p-0" style="text-align: left; "></div>
+        <div class="col-4 mt-2 text-right">
+          <div v-if="!this.$loginStatus">
             <label
-              class="login btn btn-primary mr-3"
-              data-toggle="modal"
-              data-target="#loginModal"
-            >เข้าสู่ระบบ</label>
-
-            <label
-              class="login btn btn-outline-primary"
+              class="login btn btn-outline-primary mr-2"
               data-toggle="modal"
               data-target="#registerModal"
             >สร้างบัญชีผู้ใช้</label>
+            <label
+              class="login btn btn-primary"
+              data-toggle="modal"
+              data-target="#loginModal"
+            >เข้าสู่ระบบ</label>
           </div>
           <button v-else class="btn btn-outline-primary userLogo">
             <svg
@@ -49,7 +50,7 @@ export default {
     testLogedIn: function() {
       this.logedIn = this.$loginStatus = !this.$loginStatus;
       this.logedIn;
-      console.log(this.$loginStatus);
+      //console.log(this.$loginStatus);
     }
   }
 };
@@ -98,7 +99,6 @@ export default {
 }
 
 .btn.login {
-  font-size: 0.9rem;
 }
 
 .navbarProp {
@@ -109,6 +109,12 @@ export default {
 .userLogo {
   margin-right: 20px;
   margin-bottom: 7px;
+}
+
+.textLink {
+  font-size: 18px;
+  font-weight: 800;
+  margin-right: 8px;
 }
 </style>
 
