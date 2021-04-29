@@ -2,28 +2,27 @@
   <div class="card mainCard">
     <div class="card-body" style="padding-top:60px">
       <div class="row">
-        <div class="col-1"></div>
-        <div class="col-3 text-center">
-          <div style="height: 200px;width:200px">
-            <img class="card imageCard" src />
+        <div class="col-4 text-center">
+          <div style="height: 400px;">
+            <img :src="'http://localhost:3000/'+this.currentImage" class="card imageCard" />
 
             <input
-              class="btn btn-outline-primary mt-3"
-              style="font-weight: 400; width: 200px; "
+              class="btn btn-outline-secondary mt-3"
+              style="font-weight: 400; width: 340px; "
               type="file"
               name="image"
               id="image"
               @change="selectImages"
             />
+            <br />
             <button
               class="btn btn-outline-primary mt-3"
-              style="font-weight: 400;"
+              style="font-weight: 400; width: 340px;"
               @click="submitVehicelImage()"
             >
               Add
               Image
             </button>
-            {{testImg}}
           </div>
         </div>
         <div class="col">
@@ -132,7 +131,7 @@
               <tr>
                 <td></td>
                 <td class="text-right">
-                  <button class="btn btn-danger" @click="addCar()">Save</button>
+                  <button class="btn btn-danger mt-2" @click="addCar()">Save</button>
                 </td>
               </tr>
             </tbody>
@@ -145,10 +144,9 @@
 
 <style  scoped>
 .imageCard {
-  height: 200px;
-  width: 200px;
-  max-height: 200px;
-  max-width: 200px;
+  width: 340px;
+  height: 240px;
+  object-fit: cover;
 }
 .mainCard {
   height: 630px;
@@ -188,13 +186,19 @@ export default {
       carInsurType: "",
       error: null,
       images: "",
-      testImg: ["1", "2"]
+      testImg: ["1", "2"],
+      imageUploaded: false,
+      currentImage: "CarImage/upload.png"
     };
   },
   mounted() {
     //console.log(this.vehicleListTest[0].model);
+    //this.callImage();
   },
   methods: {
+    asd() {
+      this.$router.go(this.$router.currentRoute);
+    },
     selectImages(event) {
       this.images = event.target.files;
     },
@@ -209,16 +213,12 @@ export default {
           carInsurNo: this.carInsurNo,
           carInsurType: this.carInsurType
         })
+        .then((this.imageSubmit = 1))
         .catch(err => {
           this.err = err.response.data.message;
         });
     },
-    addImageasd() {
-      this.images.forEach(image => {
-        this.testImg.push("IMG", image);
-      });
-      this.testImg = this.images[0];
-    },
+
     submitVehicelImage() {
       console.log("addimage method");
 
@@ -231,10 +231,18 @@ export default {
 
       axios
         .post(`http://localhost:3000/submitImage`, formData)
-        .then(res => alert(res))
+        .then(res => alert(res), this.callImage())
         .catch(err => {
           alert(err);
         });
+    },
+    callImage() {
+      axios
+        .get(`http://localhost:3000/getImage`)
+        .then(res => (this.currentImage = res.data.image));
+    },
+    uncallImage() {
+      this.currentImage = "";
     }
   }
 };

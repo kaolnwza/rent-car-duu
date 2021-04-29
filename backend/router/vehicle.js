@@ -221,4 +221,10 @@ router.post('/submitImage', upload.single('image'), async (req, res) => {
 
 })
 
+router.get('/getImage', async (req, res) => {
+    const image = localStorage.getItem('image_path')
+    console.log(image);
+
+    res.json({ image: image })
+})
 exports.router = router;

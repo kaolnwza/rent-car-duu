@@ -13,7 +13,11 @@
           <div class="leftSide card-body">
             <div class="row">
               <div class="col-12">
-                <button class="btn btn-outline-primary">Edit Profile</button>
+                <button
+                  class="btn btn-outline-primary"
+                  data-toggle="modal"
+                  data-target="#editModalUser"
+                >Edit Profile</button>
               </div>
             </div>
           </div>
@@ -99,23 +103,88 @@
           </div>
         </div>
       </div>
+      <!-- edit modao -->
+      <div
+        class="modal fade"
+        id="editModalUser"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="editModalUser"
+        aria-hidden="true"
+        style="margin-top: 100px;"
+      >
+        <div class="modal-dialog modal-dialog-centered" style="bottom: 70px;" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              <label class="inputLabel">ชื่อ</label>
+              <input class="inputBox form-control" placeholder />
+              <label class="inputLabel">นามสกุล</label>
+              <input class="inputBox form-control" placeholder />
+              <label class="inputLabel">รหัสผ่าน</label>
+              <input class="inputBox form-control" placeholder />
+              <label class="inputLabel">ยืนยันรหัสผ่าน</label>
+              <input class="inputBox form-control" placeholder />
+              <label class="inputLabel">มือถือ</label>
+              <input class="inputBox form-control" placeholder />
+              <label class="inputLabel">อีเมล</label>
+              <input class="inputBox form-control" placeholder />
+              <label class="inputLabel">เพศ</label>
+              <input class="inputBox form-control" placeholder />
+              <label class="inputLabel">วันเกิด</label>
+              <input class="inputBox form-control" placeholder />
+              <label class="inputLabel">อายุ</label>
+              <input class="inputBox form-control" placeholder />
+              <label class="inputLabel">เลขบัตรประชาชน</label>
+              <input class="inputBox form-control" placeholder />
+              <label class="inputLabel">ใบขับขี่</label>
+              <input class="inputBox form-control" placeholder />
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" ref="Close">Close</button>
+              <button type="button" class="btn btn-danger" @click="saveEdit()">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end edit modal -->
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
-      username: "username01",
-      firstname: "Firstname",
-      lastname: "Lastname",
-      email: "rentcar@admin.com",
-      phone: "01212312",
-      birthDate: "10/10/xxxx",
-      sex: "ชาย",
-      address: "Bangkok, Thailand"
+      userDetail: [],
+      username: "",
+      firstname: "",
+      lastname: "",
+      email: "",
+      phone: "",
+      birthDate: "",
+      sex: "",
+      address: ""
     };
+  },
+  methods: {
+    getUserDetail() {
+      axios.get("http://localhost:3000/getUserDetail").then(res => {
+        this.userDetail = res.data;
+        this.username = this.userDetail.username;
+        this.firstname = this.userDetail.fname;
+        this.lastname = this.userDetail.lname;
+        this.email = this.userDetail.email;
+        this.phone = this.userDetail.phone;
+        this.birthDate = this.userDetail.dob;
+        this.sex = this.userDetail.gender;
+        this.address = this.userDetail.address;
+        console.log(this.userDetail);
+      });
+    }
+  },
+  mounted() {
+    this.getUserDetail();
   }
 };
 </script>

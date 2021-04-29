@@ -183,7 +183,7 @@
   </div>
 </template>
 
-<style >
+<style scoped>
 .modalButton.btn {
   font-size: 14px;
 }
