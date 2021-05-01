@@ -26,7 +26,7 @@
               class="inputBox form-control"
               v-model="$v.username.$model"
               :class="{'is-invalid': $v.username.$error}"
-              placeholder="ex. Prayud44"
+              placeholder="ex. sinlapawit44"
             />
             <!--<div class="invalid-feedback invalidFeedbackStyle">Please provide a valid city.</div> -->
           </div>
@@ -184,19 +184,32 @@ function complexPassword(val) {
 export default {
   data() {
     return {
-      username: "sinlapawit",
-      password: "Ez1212312121",
-      confirm_password: "Ez1212312121",
-      f_name: "fnamer",
-      l_name: "lname",
-      email: "asd@asd.com",
-      phone: "0123456789",
-      age: "15",
+      username: "",
+      password: "",
+      confirm_password: "",
+      f_name: "",
+      l_name: "",
+      email: "",
+      phone: "",
+      age: "",
       dob: "",
       gender: "",
-      address: "asd",
-      id_card: "asd",
-      driver_lc: "asd"
+      address: "",
+      id_card: "",
+      driver_lc: ""
+      // username: "sinlapawit",
+      // password: "Ez1212312121",
+      // confirm_password: "Ez1212312121",
+      // f_name: "fnamer",
+      // l_name: "lname",
+      // email: "asd@asd.com",
+      // phone: "0123456789",
+      // age: "15",
+      // dob: "",
+      // gender: "",
+      // address: "asd",
+      // id_card: "asd",
+      // driver_lc: "asd"
     };
   },
   methods: {

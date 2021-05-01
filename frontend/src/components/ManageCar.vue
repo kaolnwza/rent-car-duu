@@ -105,9 +105,7 @@
                           v-if="item.status!=0"
                           style="padding-top:16px"
                         >
-                          <span
-                            class="btn btn-outline-primary userDetail secondTd"
-                          >View Loanee Detail</span>
+                          <!-- <span class="btn btn-outline-primary userDetail secondTd">View Loanee Detail</span> -->
                         </div>
                       </td>
                     </tr>
@@ -120,7 +118,9 @@
                       </td>
                       <td>
                         <div class="carDes text-dark" v-if="item.status!=0">
-                          <span class="btn btn-outline-primary userDetail secondTd">Manage Image</span>
+                          <span
+                            class="btn btn-outline-primary userDetail secondTd"
+                          >View Loanee Detail</span>
                         </div>
                       </td>
                     </tr>
@@ -134,7 +134,7 @@
                     class="btn btn-info mr-2"
                     data-toggle="modal"
                     data-target="#editModal"
-                    @click="editCar(item.model, item.vehicle_type, item.plate_num, item.current_location, item.r_price, item.insurance_type, item.insurance_description ,item.vehicle_id)"
+                    @click="editCar(item.model, item.vehicle_type, item.plate_num, item.current_location, item.r_price, item.insurance_type, item.insurance_description ,item.vehicle_id, item.image_path, )"
                   >แก้ไข</button>
 
                   <button class="btn btn-danger" @click="deleteCar(item.vehicle_id, index)">ลบ</button>
@@ -151,7 +151,7 @@
                 style="margin-top: 100px;"
               >
                 <div
-                  class="modal-dialog modal-dialog-centered"
+                  class="modal-dialog modal-dialog-centered modal-lg"
                   style="bottom: 120px;"
                   role="document"
                 >
@@ -162,30 +162,70 @@
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
-                    <div class="modal-body">
-                      <label class="inputLabel">Car Model</label>
-                      <input class="inputBox form-control" v-model="edit_model" placeholder />
-                      <label class="inputLabel">Car Type</label>
-                      <input class="inputBox form-control" v-model="edit_type" placeholder />
-                      <label class="inputLabel">Car Plate</label>
-                      <input class="inputBox form-control" v-model="edit_plate" placeholder />
-                      <label class="inputLabel">Car Location</label>
-                      <input class="inputBox form-control" v-model="edit_location" placeholder />
-                      <label class="inputLabel">Car Price</label>
-                      <input class="inputBox form-control" v-model="edit_price" placeholder />
-                      <hr />
-                      <label class="inputLabel">Car Insurance Type</label>
-                      <input
-                        class="inputBox form-control"
-                        v-model="edit_insurance_type"
-                        placeholder
-                      />
-                      <label class="inputLabel">Car Insurance Number</label>
-                      <input
-                        class="inputBox form-control"
-                        v-model="edit_insurance_description"
-                        placeholder
-                      />
+                    <div class="modal-body row">
+                      <!-- omage -->
+                      <div class="col-5 pl-4">
+                        <div style="height: 400px;">
+                          <img
+                            :src="'http://localhost:3000/' + currentImage"
+                            class="card imageCard"
+                          />
+
+                          <input
+                            class="btn btn-outline-secondary mt-3"
+                            style="font-weight: 400; width: 340px; "
+                            type="file"
+                            name="image"
+                            id="image"
+                            @change="selectImages"
+                          />
+                          <br />
+                          <button
+                            class="btn btn-outline-primary mt-3"
+                            style="font-weight: 400; width: 340px;"
+                            @click="submitVehicelImage()"
+                          >Add Image</button>
+                        </div>
+                      </div>
+                      <!-- righht side -->
+                      <div class="col-6 ml-5">
+                        <label class="inputLabel">Car Model</label>
+                        <input class="inputBox form-control" v-model="edit_model" placeholder />
+                        <label class="inputLabel">Car Type</label>
+                        <select class="inputBox form-control" v-model="edit_type">
+                          <option>4-Door</option>
+                          <option>2-Door</option>
+                          <option>Station Wagons</option>
+                          <option>Convertibles</option>
+                          <option>Sports Cars</option>
+                          <option>Mini-Vans</option>
+                          <option>SUV</option>
+                          <option>Pickup Trucks</option>
+                          <option>Vans</option>
+                        </select>
+                        <label class="inputLabel">Car Plate</label>
+                        <input class="inputBox form-control" v-model="edit_plate" placeholder />
+                        <label class="inputLabel">Car Location</label>
+                        <input class="inputBox form-control" v-model="edit_location" placeholder />
+                        <label class="inputLabel">Car Price</label>
+                        <input class="inputBox form-control" v-model="edit_price" placeholder />
+                        <hr />
+                        <label class="inputLabel">Car Insurance Type</label>
+
+                        <select class="inputBox form-control" v-model="edit_insurance_type">
+                          <option>1</option>
+                          <option>2</option>
+                          <option>2+</option>
+                          <option>3</option>
+                          <option>3+</option>
+                        </select>
+                        <label class="inputLabel">Car Insurance Number</label>
+                        <input
+                          class="inputBox form-control"
+                          v-model="edit_insurance_description"
+                          placeholder
+                        />
+                      </div>
                     </div>
                     <div class="modal-footer">
                       <button
@@ -267,6 +307,11 @@ td {
 }
 .fadeOpacity {
 }
+.imageCard {
+  width: 340px;
+  height: 240px;
+  object-fit: cover;
+}
 </style>
 
 <script>
@@ -284,7 +329,9 @@ export default {
       edit_price: "",
       edit_insurance_type: "",
       edit_insurance_description: "",
-      current_vehicleID: ""
+      current_vehicleID: "",
+      currentImage: "",
+      images: ""
     };
   },
   mounted() {
@@ -325,7 +372,8 @@ export default {
       get_price,
       get_insurance_type,
       get_insurance_description,
-      get_vehicle_id
+      get_vehicle_id,
+      get_image_path
     ) {
       this.edit_model = get_model;
       this.edit_type = get_type;
@@ -335,6 +383,7 @@ export default {
       this.edit_insurance_type = get_insurance_type;
       this.edit_insurance_description = get_insurance_description;
       this.current_vehicleID = get_vehicle_id;
+      this.currentImage = get_image_path; // here will change after add image to new image
     },
     saveEdit() {
       var vehicleID = this.current_vehicleID;
@@ -347,11 +396,33 @@ export default {
         current_location: this.edit_location,
         r_price: this.edit_price,
         insurance_type: this.edit_insurance_type,
-        insurance_description: this.edit_insurance_description
+        insurance_description: this.edit_insurance_description,
+        image_path: this.currentImage
       };
+
       axios
         .put(`http://localhost:3000/editCar/${vehicleID}`, data)
         .then(alert("EDIT SUCCESS"), this.$router.go(this.$router.currentRoute))
+        .catch(err => {
+          alert(err);
+        });
+    },
+    selectImages(event) {
+      this.images = event.target.files;
+    },
+    submitVehicelImage() {
+      console.log("addimage method");
+
+      let formData = new FormData();
+      this.images.forEach(image => {
+        formData.append("image", image);
+      });
+
+      axios
+        .post(`http://localhost:3000/submitImage`, formData)
+        .then(res => {
+          this.currentImage = res.data.image;
+        })
         .catch(err => {
           alert(err);
         });

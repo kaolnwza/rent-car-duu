@@ -4,12 +4,13 @@
       <!-- modal -->
       <ViewUserProfile :userDetail="userDetail" />
       <CarDetailModal :carDetail="carDetail" :insurDetail="insurDetail" :userDetail="userDetail" />
+      <RentCar :carDetail="carDetail" :insurDetail="insurDetail" :userDetail="userDetail" />
       <div class="row">
         <label class="titleLabel col-9 text-left">
           Available Car
-          <button class="btn btn-warning" @click="$router.push('/registercar')">
+          <button class="btn btn-warning">
             <fa icon="plus" />
-            <span class="ml-1">ปล่อยรถ</span>
+            <span class="ml-1" @click="$router.push('/registercar')">ปล่อยรถ</span>
           </button>
         </label>
         <!-- search box -->
@@ -21,9 +22,10 @@
             placeholder="ex. Tesla"
             aria-label="Username"
             aria-describedby="basic-addon1"
+            v-model="searchBox"
           />
           <div class="input-group-prepend">
-            <span class="input-group-text btn" id="basic-addon1">ค้นหา</span>
+            <span class="input-group-text btn" id="basic-addon1" @click="searchCar()">ค้นหา</span>
           </div>
         </div>
       </div>
@@ -97,6 +99,7 @@
                     class="btn btn-outline-danger btnSize"
                     data-toggle="modal"
                     data-target="#RentCar"
+                    @click="getCarDetail(item.vehicle_id)"
                   >เช่า</button>
                   <button
                     class="btn btn-outline-primary btnSize ml-2"
@@ -158,10 +161,12 @@ td {
 import axios from "axios";
 import ViewUserProfile from "./ViewUserProfile";
 import CarDetailModal from "./CarDetailModal";
+import RentCar from "./RentCar";
 export default {
   components: {
     ViewUserProfile,
-    CarDetailModal
+    CarDetailModal,
+    RentCar
   },
   data() {
     return {
@@ -169,11 +174,15 @@ export default {
       carDetail: {},
       insurDetail: {},
       vehicleListTest: [],
-      error: null
+      vehicleListTestBackup: [],
+      error: null,
+      searchBox: "",
+      temp: "asdasd"
     };
   },
   mounted() {
     this.getBlogDetail();
+
     //console.log(this.vehicleListTest[0].model);
   },
   methods: {
@@ -182,19 +191,20 @@ export default {
         .get(`http://localhost:3000/allCar`)
         .then(response => {
           this.vehicleListTest = response.data.vehicle;
+          this.vehicleListTestBackup = response.data.vehicle;
           console.log(this.vehicleListTest);
         })
         .catch(error => {
           this.error = error.response.data.message;
         });
     },
-    selectingUser(selectedUser) {
-      axios
-        .get(`http://localhost:3000/selectUser/${selectedUser}`)
-        .then(res => {
-          console.log(res.data);
 
+    selectingUser(user) {
+      axios
+        .get(`http://localhost:3000/selectUser/${user}`)
+        .then(res => {
           this.userDetail = res.data;
+          console.log("user = ", this.userDetail);
         })
         .catch(err => {
           alert(err.res.data.message);
@@ -213,6 +223,37 @@ export default {
         .catch(err => {
           alert(err.res.data.message);
         });
+    },
+    getCarDetailForRent(selectedUser) {
+      axios
+        .get(`http://localhost:3000/selectUser/vehicle/renting/${selectedUser}`)
+        .then(res => {
+          console.log(res.data);
+
+          this.carDetail = res.data.vehicle;
+          this.insurDetail = res.data.insurance;
+          this.userDetail = res.data.user;
+        })
+        .catch(err => {
+          alert(err.res.data.message);
+        });
+    },
+    searchCar() {
+      if (this.searchBox != "") {
+        axios
+          .get(`http://localhost:3000/search/${this.searchBox}`)
+          .then(res => (this.vehicleListTest = res.data))
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        console.log("emp");
+
+        this.getBlogDetail();
+      }
+    },
+    testEmit(val) {
+      this.temp = val;
     }
   }
 };

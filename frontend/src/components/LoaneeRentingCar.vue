@@ -28,13 +28,13 @@
                       <td>
                         <div class="carDes text-dark">
                           <span class="badge badge-primary carDetail">Type</span>
-                          {{item.type}}
+                          {{item.vehicle_type}}
                         </div>
                       </td>
                       <td>
                         <div class="carDes text-dark">
                           <span class="badge badge-warning carDetail secondTd">Loaner</span>
-                          {{item.owner}}
+                          Sinlapawit
                         </div>
                       </td>
                     </tr>
@@ -43,13 +43,13 @@
                       <td>
                         <div class="carDes text-dark">
                           <span class="badge badge-info carDetail">Plate</span>
-                          {{item.plate}}
+                          {{item.plate_num}}
                         </div>
                       </td>
                       <td>
                         <div class="carDes text-dark">
                           <span class="badge badge-warning carDetail secondTd">Loaner Phone</span>
-                          {{}}
+                          0928561885
                         </div>
                       </td>
                     </tr>
@@ -58,7 +58,7 @@
                       <td>
                         <div class="carDes text-dark">
                           <span class="badge badge-success carDetail">Location</span>
-                          {{item.location}}
+                          {{item.current_location}}
                         </div>
                       </td>
                       <td>
@@ -73,7 +73,7 @@
                       <td>
                         <div class="carDes text-dark">
                           <span class="badge badge-danger carDetail">Price</span>
-                          {{item.price}}
+                          {{item.r_price}}
                         </div>
                       </td>
                       <td>
@@ -185,7 +185,7 @@ export default {
   methods: {
     getBlogDetail() {
       axios
-        .get(`http://localhost:3000/test`)
+        .get(`http://localhost:3000/allCar`)
         .then(response => {
           this.temp = response.data.vehicle;
           this.vehicleListTest.push(this.temp[1]);

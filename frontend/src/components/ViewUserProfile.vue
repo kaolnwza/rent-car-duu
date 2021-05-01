@@ -68,7 +68,8 @@ export default {
   props: ["userDetail"],
   data() {
     return {};
-  }
+  },
+  methods: {}
 };
 </script>
 

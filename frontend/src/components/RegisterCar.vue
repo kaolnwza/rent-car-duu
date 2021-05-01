@@ -19,10 +19,7 @@
               class="btn btn-outline-primary mt-3"
               style="font-weight: 400; width: 340px;"
               @click="submitVehicelImage()"
-            >
-              Add
-              Image
-            </button>
+            >Add Image</button>
           </div>
         </div>
         <div class="col">
@@ -59,7 +56,17 @@
                   <label class="inputLabel">Car Type</label>
                 </td>
                 <td>
-                  <input class="inputBox form-control" v-model="carType" placeholder="ex. SUV, PPV" />
+                  <select class="inputBox form-control" v-model="carType">
+                    <option>4-Door</option>
+                    <option>2-Door</option>
+                    <option>Station Wagons</option>
+                    <option>Convertibles</option>
+                    <option>Sports Cars</option>
+                    <option>Mini-Vans</option>
+                    <option>SUV</option>
+                    <option>Pickup Trucks</option>
+                    <option>Vans</option>
+                  </select>
                 </td>
               </tr>
 
@@ -124,7 +131,13 @@
                   <label class="inputLabel">Insurance Type</label>
                 </td>
                 <td>
-                  <input class="inputBox form-control" v-model="carInsurType" placeholder="ex. 2+" />
+                  <select class="inputBox form-control" v-model="carInsurType">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>2+</option>
+                    <option>3</option>
+                    <option>3+</option>
+                  </select>
                 </td>
               </tr>
               <!-- save buttom -->
@@ -213,7 +226,7 @@ export default {
           carInsurNo: this.carInsurNo,
           carInsurType: this.carInsurType
         })
-        .then((this.imageSubmit = 1))
+        .then(alert("Signup Car Complete"), this.$router.push("/managecar"))
         .catch(err => {
           this.err = err.response.data.message;
         });
@@ -231,15 +244,12 @@ export default {
 
       axios
         .post(`http://localhost:3000/submitImage`, formData)
-        .then(res => alert(res), this.callImage())
+        .then(res => {
+          this.currentImage = res.data.image;
+        })
         .catch(err => {
           alert(err);
         });
-    },
-    callImage() {
-      axios
-        .get(`http://localhost:3000/getImage`)
-        .then(res => (this.currentImage = res.data.image));
     },
     uncallImage() {
       this.currentImage = "";

@@ -62,6 +62,7 @@ router.post('/addCar', authToken.tranfer, async function (req, res, next) {
         const [row2, field2] = await conn.query(
             'SELECT * FROM `vehicle` WHERE `vehicle_id` = ?',
             [row1.insertId])
+
         const [row3, field3] = await conn.query(
             'INSERT INTO `insurance` (`insurance_type`, `insurance_description`, `vehicle_vehicle_id`) VALUES (?, ?, ?)',
             [carInsurType, carInsurDesc, row1.insertId])
@@ -134,6 +135,7 @@ router.delete('/deleteCar/:vehicleID', authToken.tranfer, async (req, res) => {
 })
 
 router.put('/editCar/:vehicleID', async (req, res) => {
+    console.log('ion');
 
     var vehicleID = req.params.vehicleID;
 
@@ -147,10 +149,13 @@ router.put('/editCar/:vehicleID', async (req, res) => {
     var carInsurDesc = req.body.insurance_description;
     var carInsurType = req.body.insurance_type;
 
-    console.log(vehicleID);
+    var imagePath = localStorage.getItem('image_path');
 
+    console.log(vehicleID);
+    console.log(imagePath);
     const conn = await pool.getConnection()
     await conn.beginTransaction()
+
 
 
     try {
@@ -159,8 +164,8 @@ router.put('/editCar/:vehicleID', async (req, res) => {
 
         //const insuranceID = getInsuranceId[0][0].insurance_id;
 
-        await conn.query('UPDATE vehicle SET model=?, vehicle_type=?, plate_num=?, current_location=?, r_price=? WHERE vehicle_id = ?',
-            [carModel, carType, carPlate, carLocation, carPrice, vehicleID])
+        await conn.query('UPDATE vehicle SET model=?, vehicle_type=?, plate_num=?, current_location=?, r_price=?, image_path=? WHERE vehicle_id = ?',
+            [carModel, carType, carPlate, carLocation, carPrice, imagePath, vehicleID])
 
         await conn.query('UPDATE insurance SET insurance_type=?, insurance_description=? WHERE vehicle_vehicle_id=?', [carInsurType, carInsurDesc, vehicleID])
 
@@ -218,6 +223,8 @@ router.post('/submitImage', upload.single('image'), async (req, res) => {
 
     localStorage.setItem('image_path', file.substring(9))
 
+    res.json({ image: localStorage.getItem('image_path') })
+
 
 })
 
@@ -227,4 +234,5 @@ router.get('/getImage', async (req, res) => {
 
     res.json({ image: image })
 })
+
 exports.router = router;

@@ -20,18 +20,17 @@
           <input
             class="inputBox form-control"
             v-model="username"
-            :class="{'is-invalid': !status}"
+            :class="{'is-invalid':  status== false}"
             placeholder
           />
           <label class="inputLabel">รหัสผ่าน</label>
           <input
             class="inputBox form-control"
             v-model="password"
-            :class="{'is-invalid': !status}"
+            :class="{'is-invalid': status == false}"
             placeholder
             type="password"
           />
-          {{status}}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" ref="Close">Close</button>
@@ -48,8 +47,9 @@ export default {
   data() {
     return {
       status: "NONE",
-
-      username: "phanuwat",
+      // username: "",
+      // password: "",
+      username: "sinlapawit",
       password: "Ez1212312121",
       testToken: ""
     };

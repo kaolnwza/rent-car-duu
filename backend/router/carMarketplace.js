@@ -14,15 +14,16 @@ router.get('/selectUser/:user', async (req, res) => {
     try {
 
 
-        const user = await conn.query('SELECT fname, lname, email, phone FROM user WHERE username = ?',
+        const user = await conn.query('SELECT * FROM user WHERE username = ?',
             [selectedUser])
 
-        conn.commit()
+        await conn.commit()
 
         res.json(user[0][0])
     }
 
     catch (error) {
+        await conn.rollback()
         res.json(error)
     }
 })
@@ -44,7 +45,7 @@ router.get('/selectUser/vehicle/:vehicleID', async (req, res) => {
             [vehicleID])
 
 
-        const user = await conn.query('SELECT  fname, lname, phone, email FROM user WHERE username =?',
+        const user = await conn.query('SELECT  * FROM user WHERE username =?',
             [vehicle[0][0].loaner_user_username])
         // asd.forEach(x => {
 
@@ -65,11 +66,47 @@ router.get('/selectUser/vehicle/:vehicleID', async (req, res) => {
     }
 })
 
+//user will differrnt here will get current login user but on top of here will get loaner user
+router.get('/selectUser/vehicle/renting/:vehicleID', authToken.tranfer, async (req, res) => {
+    const selectedUser = req.token.username
+    const vehicleID = req.params.vehicleID
+    const conn = await pool.getConnection()
+    await conn.beginTransaction()
+    try {
 
+        const arr = []
+        const vehicle = await conn.query('SELECT * FROM vehicle WHERE vehicle_id = ?',
+            [vehicleID])
+
+
+
+        const insurance = await conn.query('SELECT * FROM insurance WHERE vehicle_vehicle_id = ?',
+            [vehicleID])
+
+
+        const user = selectedUser
+        // asd.forEach(x => {
+
+        // });
+        // arr.push(user[0][0])
+        // arr[0].push(user2[0][0].insurance_id)
+        await conn.commit()
+
+        res.json({
+            vehicle: vehicle[0][0],
+            insurance: insurance[0][0],
+            user: user
+        })
+    }
+
+    catch (error) {
+        res.json(error)
+    }
+})
 
 router.get("/allCar", function (req, res, next) {
 
-    const promise1 = pool.query("SELECT * FROM vehicle");
+    const promise1 = pool.query("SELECT * FROM vehicle WHERE status = 0");
 
 
 
@@ -88,4 +125,27 @@ router.get("/allCar", function (req, res, next) {
 });
 
 
+router.get('/search/:data', async (req, res) => {
+
+    const data = req.params.data
+
+    const conn = await pool.getConnection()
+    await conn.beginTransaction()
+
+    try {
+
+        const searchList = await conn.query('SELECT * FROM vehicle WHERE model LIKE ? ',
+            ['%' + data + '%'])
+
+
+
+        res.json(searchList[0])
+        await conn.commit()
+    } catch (error) {
+        conn.rollback()
+        console.log(error);
+
+    }
+
+})
 exports.router = router;
