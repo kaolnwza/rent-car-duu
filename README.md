@@ -18,6 +18,7 @@
 - upload pic
 - edit pic
 - edit user profile
+- change password**
 
 ## History
 - loaner
@@ -30,5 +31,5 @@
 ## Payment
 
 ## Manage car
-- change image && see
 - view loanee detail
+
