@@ -185,6 +185,7 @@ export default {
     }
   },
   methods: {
+    //asd
     dayCal(val1, val2) {
       var daysLeft = val1 - val2;
       daysLeft /= 24 * 3600 * 1000;
