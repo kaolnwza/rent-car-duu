@@ -70,7 +70,23 @@ router.post('/submitUserImage', upload.single('image'), async (req, res) => {
 
 })
 
+const signupSchema = Joi.object({
+    email: Joi.string().email().max(40),
+    phone: Joi.string().required().pattern(/0[0-9]{9}/).max(10),
+    f_name: Joi.string().required().max(30),
+    l_name: Joi.string().required().max(30),
 
+    // password: Joi.string().required().custom(passwordValidator).min(8).max(30),
+    // confirm_password: Joi.string().required().valid(Joi.ref('password')),
+    // username: Joi.string().required().min(5).max(20).external(usernameValiator),
+    age: Joi.number().integer().required().max(99),
+    dob: Joi.string().required(),
+    gender: Joi.string().required(),
+    address: Joi.string().required().max(200),
+    id_card: Joi.string().required().min(13).max(13),
+    driving_lc: Joi.string().required().min(8).max(8)
+
+})
 router.put('/editUser/:userID', async (req, res) => {
     console.log(req.body);
 

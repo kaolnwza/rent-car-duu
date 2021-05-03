@@ -29,6 +29,7 @@ const login = require('./router/login')
 const renting = require('./router/renting')
 const carMarketplace = require('./router/carMarketplace')
 const userRoute = require('./router/user')
+const historyRoute = require('./router/history')
 
 app.use(testRoute.router)
 app.use(carRoute.router)
@@ -37,6 +38,7 @@ app.use(login.router)
 app.use(renting.router)
 app.use(carMarketplace.router)
 app.use(userRoute.router)
+app.use(historyRoute.router)
 
 
 

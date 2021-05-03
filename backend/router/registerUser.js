@@ -35,18 +35,20 @@ async function usernameValiator(val) {
 }
 
 const signupSchema = Joi.object({
-    email: Joi.string().email(),
-    phone: Joi.string().required().pattern(/0[0-9]{9}/),
-    f_name: Joi.string().required().max(150),
-    l_name: Joi.string().required().max(150),
+    email: Joi.string().email().max(40),
+    phone: Joi.string().required().pattern(/0[0-9]{9}/).max(10),
+    f_name: Joi.string().required().max(30),
+    l_name: Joi.string().required().max(30),
 
-    password: Joi.string().required().custom(passwordValidator),
+    password: Joi.string().required().custom(passwordValidator).min(8).max(30),
     confirm_password: Joi.string().required().valid(Joi.ref('password')),
     username: Joi.string().required().min(5).max(20).external(usernameValiator),
-    age: Joi.number().integer(),
-    dob: Joi.string(),
-    gender: Joi.string(),
-    address: Joi.string()
+    age: Joi.number().integer().required().max(99),
+    dob: Joi.string().required(),
+    gender: Joi.string().required(),
+    address: Joi.string().required().max(200),
+    id_card: Joi.string().required().min(13).max(13),
+    driving_lc: Joi.string().required().min(8).max(8)
 
 })
 
@@ -73,7 +75,7 @@ router.post('/user/signup', async (req, res, next) => {
         const address = req.body.address
         const gender = req.body.gender
         const id_card = req.body.id_card
-        const driving_lc = req.body.driver_lc
+        const driving_lc = req.body.driving_lc
 
         const conn = await pool.getConnection()
         await conn.beginTransaction();

@@ -12,14 +12,21 @@
               type="file"
               name="image"
               id="image"
+              :class="{'btn-outline-danger is-invalid': $v.uploadStatus.$error}"
               @change="selectImages"
             />
             <br />
+
             <button
               class="btn btn-outline-primary mt-3"
               style="font-weight: 400; width: 340px;"
               @click="submitVehicelImage()"
+              :class="{'btn-outline-danger is-invalid': $v.uploadStatus.$error}"
             >Add Image</button>
+            <div
+              class="invalid-feedback invalidFeedbackStyle"
+              v-if="!$v.uploadStatus.required"
+            >กรุณาอัพโหลดรูปภาพ</div>
           </div>
         </div>
         <div class="col">
@@ -44,11 +51,22 @@
                   <label class="inputLabel">Car Model</label>
                 </td>
                 <td>
-                  <input
-                    class="inputBox form-control"
-                    v-model="carModel"
-                    placeholder="ex. Toyota Corolla Altis"
-                  />
+                  <div>
+                    <input
+                      class="inputBox form-control"
+                      v-model="$v.carModel.$model"
+                      placeholder="ex. Toyota Corolla Altis"
+                      :class="{'is-invalid': $v.carModel.$error}"
+                    />
+                    <div
+                      class="invalid-feedback invalidFeedbackStyle"
+                      v-if="!$v.carModel.required"
+                    >กรุณากรอกข้อมูล</div>
+                    <div
+                      class="invalid-feedback invalidFeedbackStyle"
+                      v-if="!$v.carModel.maxLength"
+                    >จำนวนตัวอักษรมากเกินไป</div>
+                  </div>
                 </td>
               </tr>
               <tr>
@@ -56,7 +74,11 @@
                   <label class="inputLabel">Car Type</label>
                 </td>
                 <td>
-                  <select class="inputBox form-control" v-model="carType">
+                  <select
+                    class="inputBox form-control"
+                    v-model="$v.carType.$model"
+                    :class="{'is-invalid': $v.carType.$error}"
+                  >
                     <option>4-Door</option>
                     <option>2-Door</option>
                     <option>Station Wagons</option>
@@ -67,6 +89,10 @@
                     <option>Pickup Trucks</option>
                     <option>Vans</option>
                   </select>
+                  <div
+                    class="invalid-feedback invalidFeedbackStyle"
+                    v-if="!$v.carType.required"
+                  >กรุณากรอกข้อมูล</div>
                 </td>
               </tr>
 
@@ -75,7 +101,20 @@
                   <label class="inputLabel">Car Registration Number</label>
                 </td>
                 <td>
-                  <input class="inputBox form-control" v-model="carRegNo" placeholder="ex. กข 2020" />
+                  <input
+                    class="inputBox form-control"
+                    v-model="$v.carRegNo.$model"
+                    :class="{'is-invalid': $v.carRegNo.$error}"
+                    placeholder="ex. กข 2020"
+                  />
+                  <div
+                    class="invalid-feedback invalidFeedbackStyle"
+                    v-if="!$v.carRegNo.required"
+                  >กรุณากรอกข้อมูล</div>
+                  <div
+                    class="invalid-feedback invalidFeedbackStyle"
+                    v-if="!$v.carRegNo.maxLength || !$v.carRegNo.minLength"
+                  >รูปแบบข้อมูลไม่ถูกต้อง</div>
                 </td>
               </tr>
               <tr>
@@ -85,9 +124,18 @@
                 <td>
                   <input
                     class="inputBox form-control"
-                    v-model="carLocation"
+                    v-model="$v.carLocation.$model"
+                    :class="{'is-invalid': $v.carLocation.$error}"
                     placeholder="ex. Bankok, Thailand"
                   />
+                  <div
+                    class="invalid-feedback invalidFeedbackStyle"
+                    v-if="!$v.carLocation.required"
+                  >กรุณากรอกข้อมูล</div>
+                  <div
+                    class="invalid-feedback invalidFeedbackStyle"
+                    v-if="!$v.carLocation.maxLength"
+                  >จำนวนตัวอักษรมากเกินไป</div>
                 </td>
               </tr>
               <tr>
@@ -95,7 +143,20 @@
                   <label class="inputLabel">Price</label>
                 </td>
                 <td>
-                  <input class="inputBox form-control" v-model="carPrice" placeholder="ex. 2000" />
+                  <input
+                    class="inputBox form-control"
+                    v-model="$v.carPrice.$model"
+                    :class="{'is-invalid': $v.carPrice.$error}"
+                    placeholder="ex. 2000"
+                  />
+                  <div
+                    class="invalid-feedback invalidFeedbackStyle"
+                    v-if="!$v.carPrice.required"
+                  >กรุณากรอกข้อมูล</div>
+                  <div
+                    class="invalid-feedback invalidFeedbackStyle"
+                    v-if="!$v.carPrice.maxLength"
+                  >จำนวนตัวอักษรมากเกินไป</div>
                 </td>
               </tr>
             </tbody>
@@ -116,28 +177,45 @@
             <tbody>
               <tr>
                 <td>
-                  <label class="inputLabel">Insurance Number</label>
-                </td>
-                <td>
-                  <input
-                    class="inputBox form-control"
-                    v-model="carInsurNo"
-                    placeholder="ex. 12404 -58101/กข/007126-69 NPP"
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>
                   <label class="inputLabel">Insurance Type</label>
                 </td>
                 <td>
-                  <select class="inputBox form-control" v-model="carInsurType">
+                  <select
+                    class="inputBox form-control"
+                    v-model="$v.carInsurType.$model"
+                    :class="{'is-invalid': $v.carModel.$error}"
+                  >
                     <option>1</option>
                     <option>2</option>
                     <option>2+</option>
                     <option>3</option>
                     <option>3+</option>
                   </select>
+                  <div
+                    class="invalid-feedback invalidFeedbackStyle"
+                    v-if="!$v.carInsurType.required"
+                  >กรุณากรอกข้อมูล</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="inputLabel">Insurance Description</label>
+                </td>
+                <td>
+                  <input
+                    class="inputBox form-control"
+                    v-model="$v.carInsurDesc.$model"
+                    :class="{'is-invalid': $v.carModel.$error}"
+                    placeholder="ex. "
+                  />
+                  <div
+                    class="invalid-feedback invalidFeedbackStyle"
+                    v-if="!$v.carInsurDesc.required"
+                  >กรุณากรอกข้อมูล</div>
+                  <div
+                    class="invalid-feedback invalidFeedbackStyle"
+                    v-if="!$v.carInsurDesc.maxLength"
+                  >จำนวนตัวอักษรมากเกินไป</div>
                 </td>
               </tr>
               <!-- save buttom -->
@@ -187,6 +265,12 @@ hr {
 
 <script>
 import axios from "axios";
+import {
+  required,
+  minLength,
+  maxLength
+  //integer
+} from "vuelidate/lib/validators";
 export default {
   data() {
     return {
@@ -195,14 +279,47 @@ export default {
       carRegNo: "",
       carLocation: "",
       carPrice: "",
-      carInsurNo: "",
+      carInsurDesc: "",
       carInsurType: "",
       error: null,
       images: "",
       testImg: ["1", "2"],
       imageUploaded: false,
-      currentImage: "CarImage/upload.png"
+      currentImage: "CarImage/upload.png",
+      uploadStatus: ""
     };
+  },
+  validations: {
+    carModel: {
+      required: required,
+      maxLength: maxLength(66)
+    },
+    carType: {
+      required: required
+    },
+    carRegNo: {
+      required: required,
+      minLength: minLength(5),
+      maxLength: maxLength(8)
+    },
+    carLocation: {
+      required: required,
+      maxLength: maxLength(255)
+    },
+    carPrice: {
+      required: required,
+      maxLength: maxLength(8)
+    },
+    carInsurDesc: {
+      required: required,
+      maxLength: maxLength(255)
+    },
+    carInsurType: {
+      required: required
+    },
+    uploadStatus: {
+      required: required
+    }
   },
   mounted() {
     //console.log(this.vehicleListTest[0].model);
@@ -216,20 +333,23 @@ export default {
       this.images = event.target.files;
     },
     addCar() {
-      axios
-        .post(`http://localhost:3000/addCar`, {
-          carModel: this.carModel,
-          carType: this.carType,
-          carRegNo: this.carRegNo,
-          carLocation: this.carLocation,
-          carPrice: this.carPrice,
-          carInsurNo: this.carInsurNo,
-          carInsurType: this.carInsurType
-        })
-        .then(alert("Signup Car Complete"), this.$router.push("/managecar"))
-        .catch(err => {
-          this.err = err.response.data.message;
-        });
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        axios
+          .post(`http://localhost:3000/addCar`, {
+            carModel: this.carModel,
+            carType: this.carType,
+            carRegNo: this.carRegNo,
+            carLocation: this.carLocation,
+            carPrice: this.carPrice,
+            carInsurDesc: this.carInsurDesc,
+            carInsurType: this.carInsurType
+          })
+          .then(alert("Signup Car Complete"), this.$router.push("/managecar"))
+          .catch(err => {
+            this.err = err.response.data.message;
+          });
+      }
     },
 
     submitVehicelImage() {
@@ -246,6 +366,7 @@ export default {
         .post(`http://localhost:3000/submitImage`, formData)
         .then(res => {
           this.currentImage = res.data.image;
+          this.uploadStatus = "uploaded";
         })
         .catch(err => {
           alert(err);

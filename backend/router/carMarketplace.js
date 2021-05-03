@@ -104,24 +104,28 @@ router.get('/selectUser/vehicle/renting/:vehicleID', authToken.tranfer, async (r
     }
 })
 
-router.get("/allCar", function (req, res, next) {
-
-    const promise1 = pool.query("SELECT * FROM vehicle WHERE status = 0");
+router.get("/allCar", async (req, res, next) => {
 
 
 
-    Promise.all([promise1])
-        .then((results) => {
-            const [vehicle, blogFields] = results[0];
+    const conn = await pool.getConnection();
+    await conn.beginTransaction()
 
-            res.json({
-                vehicle: vehicle,
-                error: null,
-            });
-        })
-        .catch((err) => {
-            return res.status(500).json(err);
-        });
+    try {
+
+        const vehicle = await conn.query("SELECT * FROM vehicle WHERE status = 0");
+
+        res.json(
+            vehicle[0]
+        )
+        await conn.commit()
+
+    } catch (error) {
+        await conn.rollback();
+        res.json(error)
+    }
+
+
 });
 
 

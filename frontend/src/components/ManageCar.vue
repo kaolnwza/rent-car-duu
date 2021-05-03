@@ -46,8 +46,12 @@
                       </td>
                       <td>
                         <div class="carDes text-dark">
-                          <span class="badge badge-warning carDetail secondTd">Loanee</span>
-                          {{item.f_name + ' ' + item.l_name}}
+                          <span
+                            class="badge badge-warning carDetail secondTd"
+                            style="margin-right: 6px;"
+                          >Loanee</span>
+                          <span v-if="item.f_name">{{item.f_name + ' ' + item.l_name}}</span>
+                          <span v-if="!item.f_name">No Loanee</span>
                         </div>
                       </td>
                     </tr>
@@ -128,7 +132,11 @@
                 </div>
                 <!-- right side -->
                 <div class="text-right rightSideButton">
-                  <button class="btn btn-warning mr-2" v-if="item.status==1">ยืนยันการให้เช่า</button>
+                  <button
+                    class="btn btn-warning mr-2"
+                    v-if="item.status==1"
+                    @click="confirmRenting(item.vehicle_id)"
+                  >ยืนยันการให้เช่า</button>
 
                   <button
                     class="btn btn-info mr-2"
@@ -179,6 +187,7 @@
                             id="image"
                             @change="selectImages"
                           />
+
                           <br />
                           <button
                             class="btn btn-outline-primary mt-3"
@@ -189,42 +198,134 @@
                       </div>
                       <!-- righht side -->
                       <div class="col-6 ml-5">
-                        <label class="inputLabel">Car Model</label>
-                        <input class="inputBox form-control" v-model="edit_model" placeholder />
-                        <label class="inputLabel">Car Type</label>
-                        <select class="inputBox form-control" v-model="edit_type">
-                          <option>4-Door</option>
-                          <option>2-Door</option>
-                          <option>Station Wagons</option>
-                          <option>Convertibles</option>
-                          <option>Sports Cars</option>
-                          <option>Mini-Vans</option>
-                          <option>SUV</option>
-                          <option>Pickup Trucks</option>
-                          <option>Vans</option>
-                        </select>
-                        <label class="inputLabel">Car Plate</label>
-                        <input class="inputBox form-control" v-model="edit_plate" placeholder />
-                        <label class="inputLabel">Car Location</label>
-                        <input class="inputBox form-control" v-model="edit_location" placeholder />
-                        <label class="inputLabel">Car Price</label>
-                        <input class="inputBox form-control" v-model="edit_price" placeholder />
+                        <div>
+                          <label class="inputLabel">Car Model</label>
+                          <input
+                            class="inputBox form-control"
+                            v-model="$v.edit_model.$model"
+                            :class="{'is-invalid': $v.edit_model.$error}"
+                            placeholder
+                          />
+                          <div
+                            class="invalid-feedback invalidFeedbackStyle"
+                            v-if="!$v.edit_model.required"
+                          >กรุณากรอกข้อมูล</div>
+                          <div
+                            class="invalid-feedback invalidFeedbackStyle"
+                            v-if="!$v.edit_model.maxLength"
+                          >จำนวนตัวอักษรมากเกินไป</div>
+                        </div>
+                        <div>
+                          <label class="inputLabel">Car Type</label>
+                          <select
+                            class="inputBox form-control"
+                            v-model="$v.edit_type.$model"
+                            :class="{'is-invalid': $v.edit_type.$error}"
+                          >
+                            <option>4-Door</option>
+                            <option>2-Door</option>
+                            <option>Station Wagons</option>
+                            <option>Convertibles</option>
+                            <option>Sports Cars</option>
+                            <option>Mini-Vans</option>
+                            <option>SUV</option>
+                            <option>Pickup Trucks</option>
+                            <option>Vans</option>
+                          </select>
+                          <div
+                            class="invalid-feedback invalidFeedbackStyle"
+                            v-if="!$v.edit_type.required"
+                          >กรุณากรอกข้อมูล</div>
+                        </div>
+                        <div>
+                          <label class="inputLabel">Car Plate</label>
+                          <input
+                            class="inputBox form-control"
+                            v-model="$v.edit_plate.$model"
+                            :class="{'is-invalid': $v.edit_plate.$error}"
+                            placeholder
+                          />
+                          <div
+                            class="invalid-feedback invalidFeedbackStyle"
+                            v-if="!$v.edit_plate.required"
+                          >กรุณากรอกข้อมูล</div>
+                          <div
+                            class="invalid-feedback invalidFeedbackStyle"
+                            v-if="!$v.edit_plate.maxLength || !$v.edit_plate.minLength"
+                          >รูปแบบข้อมูลไม่ถูกต้อง</div>
+                        </div>
+                        <div>
+                          <label class="inputLabel">Car Location</label>
+                          <input
+                            class="inputBox form-control"
+                            v-model="$v.edit_location.$model"
+                            :class="{'is-invalid': $v.edit_location.$error}"
+                            placeholder
+                          />
+                          <div
+                            class="invalid-feedback invalidFeedbackStyle"
+                            v-if="!$v.edit_location.required"
+                          >กรุณากรอกข้อมูล</div>
+                          <div
+                            class="invalid-feedback invalidFeedbackStyle"
+                            v-if="!$v.edit_location.maxLength"
+                          >จำนวนตัวอักษรมากเกินไป</div>
+                        </div>
+                        <div>
+                          <label class="inputLabel">Car Price</label>
+                          <input
+                            class="inputBox form-control"
+                            v-model="$v.edit_price.$model"
+                            :class="{'is-invalid': $v.edit_price.$error}"
+                            placeholder
+                          />
+                          <div
+                            class="invalid-feedback invalidFeedbackStyle"
+                            v-if="!$v.edit_price.required"
+                          >กรุณากรอกข้อมูล</div>
+                          <div
+                            class="invalid-feedback invalidFeedbackStyle"
+                            v-if="!$v.edit_price.maxLength"
+                          >จำนวนตัวอักษรมากเกินไป</div>
+                        </div>
                         <hr />
-                        <label class="inputLabel">Car Insurance Type</label>
 
-                        <select class="inputBox form-control" v-model="edit_insurance_type">
-                          <option>1</option>
-                          <option>2</option>
-                          <option>2+</option>
-                          <option>3</option>
-                          <option>3+</option>
-                        </select>
-                        <label class="inputLabel">Car Insurance Number</label>
-                        <input
-                          class="inputBox form-control"
-                          v-model="edit_insurance_description"
-                          placeholder
-                        />
+                        <div>
+                          <label class="inputLabel">Car Insurance Type</label>
+
+                          <select
+                            class="inputBox form-control"
+                            v-model="$v.edit_insurance_type.$model"
+                            :class="{'is-invalid': $v.edit_insurance_type.$error}"
+                          >
+                            <option>1</option>
+                            <option>2</option>
+                            <option>2+</option>
+                            <option>3</option>
+                            <option>3+</option>
+                          </select>
+                          <div
+                            class="invalid-feedback invalidFeedbackStyle"
+                            v-if="!$v.edit_insurance_type.required"
+                          >กรุณากรอกข้อมูล</div>
+                        </div>
+                        <div>
+                          <label class="inputLabel">Car Insurance Description</label>
+                          <input
+                            class="inputBox form-control"
+                            v-model="$v.edit_insurance_description.$model"
+                            :class="{'is-invalid': $v.edit_model.$error}"
+                            placeholder
+                          />
+                          <div
+                            class="invalid-feedback invalidFeedbackStyle"
+                            v-if="!$v.edit_insurance_description.required"
+                          >กรุณากรอกข้อมูล</div>
+                          <div
+                            class="invalid-feedback invalidFeedbackStyle"
+                            v-if="!$v.edit_insurance_description.maxLength"
+                          >จำนวนตัวอักษรมากเกินไป</div>
+                        </div>
                       </div>
                     </div>
                     <div class="modal-footer">
@@ -316,6 +417,12 @@ td {
 
 <script>
 import axios from "axios";
+import {
+  required,
+  minLength,
+  maxLength
+  //integer
+} from "vuelidate/lib/validators";
 export default {
   data() {
     return {
@@ -331,7 +438,8 @@ export default {
       edit_insurance_description: "",
       current_vehicleID: "",
       currentImage: "",
-      images: ""
+      images: "",
+      uploadStatus: ""
     };
   },
   mounted() {
@@ -386,26 +494,32 @@ export default {
       this.currentImage = get_image_path; // here will change after add image to new image
     },
     saveEdit() {
-      var vehicleID = this.current_vehicleID;
-      console.log(vehicleID);
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        var vehicleID = this.current_vehicleID;
+        console.log(vehicleID);
 
-      const data = {
-        model: this.edit_model,
-        vehicle_type: this.edit_type,
-        plate_num: this.edit_plate,
-        current_location: this.edit_location,
-        r_price: this.edit_price,
-        insurance_type: this.edit_insurance_type,
-        insurance_description: this.edit_insurance_description,
-        image_path: this.currentImage
-      };
+        const data = {
+          model: this.edit_model,
+          vehicle_type: this.edit_type,
+          plate_num: this.edit_plate,
+          current_location: this.edit_location,
+          r_price: this.edit_price,
+          insurance_type: this.edit_insurance_type,
+          insurance_description: this.edit_insurance_description,
+          image_path: this.currentImage
+        };
 
-      axios
-        .put(`http://localhost:3000/editCar/${vehicleID}`, data)
-        .then(alert("EDIT SUCCESS"), this.$router.go(this.$router.currentRoute))
-        .catch(err => {
-          alert(err);
-        });
+        axios
+          .put(`http://localhost:3000/editCar/${vehicleID}`, data)
+          .then(
+            alert("EDIT SUCCESS"),
+            this.$router.go(this.$router.currentRoute)
+          )
+          .catch(err => {
+            alert(err);
+          });
+      }
     },
     selectImages(event) {
       this.images = event.target.files;
@@ -422,10 +536,51 @@ export default {
         .post(`http://localhost:3000/submitImage`, formData)
         .then(res => {
           this.currentImage = res.data.image;
+          this.uploadStatus = "uploaded";
         })
         .catch(err => {
           alert(err);
         });
+    },
+    confirmRenting(vehicleID) {
+      axios
+        .put(`http://localhost:3000/confirmLoaneePayment/${vehicleID}`)
+        .then(
+          console.log("success"),
+          this.$router.go(this.$router.currentRoute)
+        )
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },
+  validations: {
+    edit_model: {
+      required: required,
+      maxLength: maxLength(66)
+    },
+    edit_type: {
+      required: required
+    },
+    edit_plate: {
+      required: required,
+      minLength: minLength(5),
+      maxLength: maxLength(8)
+    },
+    edit_location: {
+      required: required,
+      maxLength: maxLength(255)
+    },
+    edit_price: {
+      required: required,
+      maxLength: maxLength(8)
+    },
+    edit_insurance_type: {
+      required: required
+    },
+    edit_insurance_description: {
+      required: required,
+      maxLength: maxLength(255)
     }
   }
 };

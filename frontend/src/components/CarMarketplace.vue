@@ -2,9 +2,14 @@
   <div class="card mainCard">
     <div class="card-body">
       <!-- modal -->
-      <ViewUserProfile :userDetail="userDetail" />
-      <CarDetailModal :carDetail="carDetail" :insurDetail="insurDetail" :userDetail="userDetail" />
-      <RentCar :carDetail="carDetail" :insurDetail="insurDetail" :userDetail="userDetail" />
+      <ViewUserProfile :userDetail_viewUserProfile="userDetail_viewUserProfile" />
+      <CarDetailModal
+        :carDetail="carDetail"
+        :insurDetail="insurDetail"
+        :userDetail="userDetail"
+        name="cardetail"
+      />
+      <RentCar :carDetail="carDetail" :userDetail="userDetail" name="rentcar" />
       <div class="row">
         <label class="titleLabel col-9 text-left">
           Available Car
@@ -99,7 +104,7 @@
                     class="btn btn-outline-danger btnSize"
                     data-toggle="modal"
                     data-target="#RentCar"
-                    @click="getCarDetail(item.vehicle_id)"
+                    @click="getCarDetailForRent(item.vehicle_id)"
                   >เช่า</button>
                   <button
                     class="btn btn-outline-primary btnSize ml-2"
@@ -171,6 +176,7 @@ export default {
   data() {
     return {
       userDetail: {},
+      userDetail_viewUserProfile: {},
       carDetail: {},
       insurDetail: {},
       vehicleListTest: [],
@@ -190,8 +196,10 @@ export default {
       axios
         .get(`http://localhost:3000/allCar`)
         .then(response => {
-          this.vehicleListTest = response.data.vehicle;
-          this.vehicleListTestBackup = response.data.vehicle;
+          console.log(response.data);
+
+          this.vehicleListTest = response.data;
+          //this.vehicleListTestBackup = response.data;
           console.log(this.vehicleListTest);
         })
         .catch(error => {
@@ -203,7 +211,7 @@ export default {
       axios
         .get(`http://localhost:3000/selectUser/${user}`)
         .then(res => {
-          this.userDetail = res.data;
+          this.userDetail_viewUserProfile = res.data;
           console.log("user = ", this.userDetail);
         })
         .catch(err => {

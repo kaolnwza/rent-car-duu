@@ -46,7 +46,7 @@ router.post('/addCar', authToken.tranfer, async function (req, res, next) {
 
     var carOwner = req.token.username;
 
-    var carInsurDesc = req.body.carDesc
+    var carInsurDesc = req.body.carInsurDesc
     var carInsurType = req.body.carInsurType;
 
     var imgPath = localStorage.getItem('image_path')
@@ -233,6 +233,29 @@ router.get('/getImage', async (req, res) => {
     console.log(image);
 
     res.json({ image: image })
+})
+
+router.put('/confirmLoaneePayment/:vehicleID', async (req, res) => {
+    const conn = await pool.getConnection();
+    await conn.beginTransaction();
+
+    const vehicleID = req.params.vehicleID;
+
+    try {
+
+
+        await conn.query('UPDATE vehicle SET status=? WHERE vehicle_id=?', ['2', vehicleID])
+
+        await conn.commit()
+        res.json('success')
+
+    } catch (error) {
+        await conn.rollback()
+        console.log(error);
+
+        res.json(error)
+
+    }
 })
 
 exports.router = router;

@@ -29,7 +29,7 @@
               <label class="custom-file-label" for="customFile">005-7-55476-1</label>
             </div>
           </form>-->
-          <form>
+          <!-- <form>
             <label for class="textLabel">บัตรประชาชน</label>
             <div class="custom-file">
               <input type="file" class="custom-file-input" id="customFile" />
@@ -42,7 +42,7 @@
               <input type="file" class="custom-file-input" id="customFile" />
               <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
-          </form>
+          </form>-->
           <form>
             <label for class="textLabel">ประเภทการโอน</label>
             <div class="custom-file">
@@ -130,7 +130,7 @@
 import axios from "axios";
 export default {
   //carDetail : selectingCar, userDetail : loaner
-  props: ["carDetail", "insurDetail", "userDetail"],
+  props: ["carDetail", "userDetail"],
   data() {
     return {
       username: "narutoKonoha",

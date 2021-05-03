@@ -24,6 +24,7 @@
                   <img
                     class="card imageCard"
                     :src="'http://localhost:3000/' + carDetail.image_path"
+                    name="carDetailModal_image"
                   />
                 </div>
               </div>

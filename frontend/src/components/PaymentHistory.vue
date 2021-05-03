@@ -5,47 +5,19 @@
         <thead>
           <tr>
             <th scope="col">รหัสธุรกรรม</th>
+            <th scope="col">รหัสการเช่า</th>
             <th scope="col">วิธีการชำระเงิน</th>
             <th scope="col">ค่าใช้จ่ายสุทธิ</th>
             <th scope="col">วันที่ดำเนินการ</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Credit</td>
-            <td>6000</td>
-            <td>28-01-2020</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Cash</td>
-            <td>7000</td>
-            <td>22-02-2020</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Credit</td>
-            <td>2000</td>
-            <td>18-04-2020</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Mobile Payments</td>
-            <td>1000</td>
-            <td>04-04-2020</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>Bank Transfers</td>
-            <td>3000</td>
-            <td>08-06-2020</td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td>Cash</td>
-            <td>2000</td>
-            <td>21-07-2020</td>
+          <tr v-for="(item, index) in history_data" :key="index">
+            <td>{{item.payment_id}}</td>
+            <td>{{item.renting_id}}</td>
+            <td>{{item.payment_method}}</td>
+            <td>{{item.total_price}}</td>
+            <td>{{item.transaction_date}}</td>
           </tr>
         </tbody>
       </table>
@@ -63,4 +35,29 @@ td {
   border-width: 0.2rem;
 }
 </style>
+
+<script>
+import axios from "axios";
+export default {
+  data() {
+    return {
+      history_data: []
+    };
+  },
+  mounted() {
+    this.getPaymentHistory();
+  },
+  methods: {
+    getPaymentHistory() {
+      axios
+        .get(`http://localhost:3000/getPaymentHistory`)
+        .then(res => {
+          this.history_data = res.data;
+          console.log(this.history_data);
+        })
+        .catch(err => console.log(err));
+    }
+  }
+};
+</script>
 

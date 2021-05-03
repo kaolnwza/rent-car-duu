@@ -23,10 +23,10 @@
             </div>
           </div>
         </div>
-
+        <!-- 
         <div class="leftSideBottom card">
           <div class="leftSideBottom card-body">
-            <!--- -->
+            
             <div class="row">
               <div class="col-6">
                 <button
@@ -39,7 +39,7 @@
                 <button class="btn btn-outline-primary functionButton leftButton">รถที่ให้เช่า</button>
               </div>
 
-              <!-- -->
+             
 
               <div class="col-6">
                 <button
@@ -58,7 +58,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div>-->
       </div>
 
       <!-- right side -->
@@ -114,133 +114,284 @@
           </div>
         </div>
       </div>
-      <!-- edit modao -->
+    </div>
+    <!-- edit modao -->
+    <div
+      class="modal fade"
+      id="editModalUser"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="editModalUser"
+      aria-hidden="true"
+      style="margin-top: 100px;"
+    >
       <div
-        class="modal fade"
-        id="editModalUser"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="editModalUser"
-        aria-hidden="true"
-        style="margin-top: 100px;"
+        class="modal-dialog modal-dialog-centered modal-xl"
+        style="bottom: 100px;"
+        role="document"
       >
-        <div
-          class="modal-dialog modal-dialog-centered modal-lg"
-          style="bottom: 100px;"
-          role="document"
-        >
-          <div class="modal-content">
-            <div class="modal-body row">
-              <!-- image -->
-              <div class="col-5 pl-5 pt-4">
-                <div style="height: 400px; margin-left:25px; ">
-                  <img class="card imageCard" :src="'http://localhost:3000/'+edit_image" />
+        <div class="modal-content">
+          <div class="modal-body row pt-5">
+            <!-- image -->
+            <div class="col-3 pl-5">
+              <div style="height: 400px; margin-left:15px; padding-top:30px;">
+                <img class="card imageCard" :src="'http://localhost:3000/'+edit_image" />
 
-                  <input
-                    class="btn btn-outline-secondary mt-3"
-                    style="font-weight: 400; width: 240px; "
-                    type="file"
-                    name="image"
-                    id="image"
-                    @change="selectImages"
-                  />
-                  <br />
-                  <button
-                    class="btn btn-outline-primary mt-3"
-                    style="font-weight: 400; width: 240px;"
-                    @click="submitUserImage()"
-                  >Add Image</button>
-                </div>
+                <input
+                  class="btn btn-outline-secondary mt-3"
+                  style="font-weight: 400; width: 208px; "
+                  type="file"
+                  name="image"
+                  id="image"
+                  @change="selectImages"
+                />
+                <br />
+                <button
+                  class="btn btn-outline-primary mt-2"
+                  style="font-weight: 400; width: 208px;"
+                  @click="submitUserImage()"
+                >Add Image</button>
               </div>
-              <!-- righht side -->
-              <div class="col-6 ml-5">
+            </div>
+            <!-- righht side -->
+            <div class="col-4 ml-5">
+              <div>
                 <label class="inputLabel">ชื่อ</label>
-                <input class="inputBox form-control" v-model="edit_fname" placeholder />
+                <input
+                  class="inputBox form-control"
+                  v-model="$v.edit_fname.$model"
+                  :class="{'is-invalid': $v.edit_fname.$error}"
+                  placeholder="ex. Sinlapawit"
+                />
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_fname.required"
+                >กรุณากรอกข้อมูล</div>
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_fname.maxLength"
+                >จำนวนตัวอักษรมากเกินไป</div>
+              </div>
+              <!-- lastname -->
+              <div>
                 <label class="inputLabel">นามสกุล</label>
-                <input class="inputBox form-control" v-model="edit_lname" placeholder />
-                <label class="inputLabel">มือถือ</label>
-                <input class="inputBox form-control" v-model="edit_phone" placeholder />
+                <input
+                  class="inputBox form-control"
+                  v-model="$v.edit_lname.$model"
+                  :class="{'is-invalid': $v.edit_lname.$error}"
+                  placeholder="ex. Ritnamkham"
+                />
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_lname.required"
+                >กรุณากรอกข้อมูล</div>
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_lname.maxLength"
+                >จำนวนตัวอักษรมากเกินไป</div>
+              </div>
+              <!-- email -->
+              <div>
                 <label class="inputLabel">อีเมล</label>
-                <input class="inputBox form-control" v-model="edit_email" placeholder />
+                <input
+                  class="inputBox form-control"
+                  v-model="$v.edit_email.$model"
+                  :class="{'is-invalid': $v.edit_email.$error}"
+                  placeholder="ex. naruto500@hotmail.com"
+                />
+
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_email.required"
+                >กรุณากรอกข้อมูล</div>
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_email.email"
+                >รูปแบบข้อมูลอีเมลไม่ถูกต้อง</div>
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_email.maxLength"
+                >จำนวนตัวอักษรมากเกินไป</div>
+              </div>
+              <!-- phone -->
+              <div>
+                <label class="inputLabel">เบอร์โทรศัพท์</label>
+                <input
+                  class="inputBox form-control"
+                  v-model="$v.edit_phone.$model"
+                  :class="{'is-invalid': $v.edit_phone.$error}"
+                  placeholder="ex. 092xxxxxxx"
+                />
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_phone.required"
+                >กรุณากรอกข้อมูล</div>
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_phone.phone"
+                >รูปแบบข้อมูลเบอร์มือถือไม่ถูกต้อง</div>
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_phone.maxLength"
+                >จำนวนตัวอักษรมากเกินไป</div>
+              </div>
+              <!-- age -->
+              <div>
+                <label class="inputLabel">อายุ</label>
+                <input
+                  type="number"
+                  class="inputBox form-control"
+                  v-model="$v.edit_age.$model"
+                  :class="{'is-invalid': $v.edit_age.$error}"
+                  placeholder="ex. 29"
+                />
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_age.required"
+                >กรุณากรอกข้อมูล</div>
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_age.maxLength"
+                >รูปแบบข้อมูลอายุไม่ถูกต้อง</div>
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_age.integer"
+                >ต้องเป็นตัวเลขเท่านั้น</div>
+              </div>
+            </div>
+            <!-- col -->
+            <div class="col-4">
+              <!-- date -->
+              <div>
+                <label class="inputLabel">วัน เดือน ปีเกิด</label>
+                <input
+                  class="inputBox form-control"
+                  type="date"
+                  v-model="$v.edit_dob.$model"
+                  :class="{'is-invalid': $v.edit_dob.$error}"
+                  value="2011-08-19"
+                />
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_dob.required"
+                >กรุณากรอกข้อมูล</div>
+              </div>
+              <!-- gender -->
+              <div>
                 <label class="inputLabel">เพศ</label>
-                <select class="inputBox form-control" v-model="edit_gender">
+                <select
+                  class="inputBox form-control"
+                  v-model="$v.edit_gender.$model"
+                  :class="{'is-invalid': $v.edit_gender.$error}"
+                >
                   <option>male</option>
                   <option>female</option>
                 </select>
-                <label class="inputLabel">วัดเกิด</label>
-                <input class="inputBox form-control" v-model="edit_dob" placeholder type="date" />
-                <label class="inputLabel">อายุ</label>
-                <input class="inputBox form-control" v-model="edit_age" placeholder />
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_gender.required"
+                >กรุณากรอกข้อมูล</div>
+              </div>
+              <!-- address -->
+              <div>
                 <label class="inputLabel">ที่อยู่</label>
-                <input class="inputBox form-control" v-model="edit_address" placeholder />
-                <label class="inputLabel">เลขบัตรประชาชน</label>
-                <input class="inputBox form-control" v-model="edit_id_card" placeholder />
-                <label class="inputLabel">เลขใบขับขี่</label>
-                <input class="inputBox form-control" v-model="edit_driving_lc" placeholder />
+                <input
+                  class="inputBox form-control"
+                  rows="3"
+                  v-model="$v.edit_address.$model"
+                  :class="{'is-invalid': $v.edit_address.$error}"
+                />
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_address.required"
+                >กรุณากรอกข้อมูล</div>
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_address.maxLength"
+                >จำนวนตัวอักษรมากเกินไป</div>
+              </div>
+              <!-- id card -->
+              <div>
+                <label class="inputLabel">หมายเลขบัตรประชาชน</label>
+                <input
+                  class="inputBox form-control"
+                  type="text"
+                  v-model="$v.edit_id_card.$model"
+                  :class="{'is-invalid': $v.edit_id_card.$error}"
+                  value="2011-08-19"
+                  placeholder="ex. 1590003468331"
+                />
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_id_card.required"
+                >กรุณากรอกข้อมูล</div>
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_id_card.minLength || !$v.edit_id_card.maxLength"
+                >รูปแบบข้อมูลเลขบัตรประชาชนไม่ถูกต้อง</div>
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_id_card.integer"
+                >ต้องเป็นตัวเลขเท่านั้น</div>
+              </div>
+              <!-- driving lc -->
+              <div>
+                <label class="inputLabel">หมายเลขใบขับขี่</label>
+                <input
+                  class="inputBox form-control"
+                  type="text"
+                  v-model="$v.edit_driving_lc.$model"
+                  :class="{'is-invalid': $v.edit_driving_lc.$error}"
+                  value="2011-08-19"
+                  placeholder="ex. 49005438"
+                />
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_driving_lc.required"
+                >กรุณากรอกข้อมูล</div>
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_driving_lc.minLength || !$v.edit_driving_lc.maxLength"
+                >รูปแบบข้อมูลหมายเลขใบขับขี่ไม่ถูกต้อง</div>
+                <div
+                  class="invalid-feedback invalidFeedbackStyle"
+                  v-if="!$v.edit_driving_lc.integer"
+                >ต้องเป็นตัวเลขเท่านั้น</div>
               </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal" ref="Close">Close</button>
-              <button
-                type="button"
-                class="btn btn-danger"
-                @click="saveEdit(userDetail.username)"
-              >Save</button>
-            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" ref="Close">Close</button>
+            <button type="button" class="btn btn-danger" @click="saveEdit(userDetail.username)">Save</button>
           </div>
         </div>
       </div>
-      <!--
-      <div
-        class="modal fade"
-        id="editModalUser"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="editModalUser"
-        aria-hidden="true"
-        style="margin-top: 100px;"
-      >
-        <div class="modal-dialog modal-dialog-centered" style="bottom: 100px;" role="document">
-          <div class="modal-content">
-            <div class="modal-body">
-              <label class="inputLabel">ชื่อ</label>
-              <input class="inputBox form-control" v-model="edit_fname" placeholder />
-              <label class="inputLabel">นามสกุล</label>
-              <input class="inputBox form-control" v-model="edit_lname" placeholder />
-              <label class="inputLabel">รหัสผ่าน</label>
-              <input class="inputBox form-control" v-model="edit_password" placeholder />
-              <label class="inputLabel">ยืนยันรหัสผ่าน</label>
-              <input class="inputBox form-control" v-model="edit_confirm_password" placeholder />
-              <label class="inputLabel">มือถือ</label>
-              <input class="inputBox form-control" v-model="edit_phone" placeholder />
-              <label class="inputLabel">อีเมล</label>
-              <input class="inputBox form-control" v-model="edit_email" placeholder />
-              <label class="inputLabel">เพศ</label>
-              <input class="inputBox form-control" v-model="edit_gender" placeholder />
-              <label class="inputLabel">วันเกิด</label>
-              <input class="inputBox form-control" v-model="edit_dob" placeholder />
-              <label class="inputLabel">อายุ</label>
-              <input class="inputBox form-control" v-model="edit_age" placeholder />
-              <label class="inputLabel">ที่อยู่</label>
-              <input class="inputBox form-control" v-model="edit_address" placeholder />
-              <label class="inputLabel">เลขบัตรประชาชน</label>
-              <input class="inputBox form-control" v-model="edit_id_card" placeholder />
-              <label class="inputLabel">เลขใบขับขี่</label>
-              <input class="inputBox form-control" v-model="edit_driving_lc" placeholder />
-              <div class="text-right mt-2">
-                <button type="button" class="btn btn-danger" @click="saveEdit()">Save</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>-->
-      <!-- end edit modal -->
     </div>
+    <!-- end edit modal -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import {
+  required,
+  email,
+  minLength,
+  //sameAs,
+  maxLength,
+  integer
+} from "vuelidate/lib/validators";
+
+function phone(val) {
+  return !!val.match(/0[0-9]{9}/);
+}
+
+// function complexPassword(val) {
+//   if (!(val.match(/[a-z]/) && val.match(/[A-Z]/) && val.match(/[0-9]/))) {
+//     return false;
+//   }
+//   return true;
+// }
 export default {
   data() {
     return {
@@ -264,6 +415,63 @@ export default {
       edit_password: "",
       edit_confirm_password: ""
     };
+  },
+  validations: {
+    // password: {
+    //   required: required,
+    //   minLength: minLength(8),
+    //   maxLength: maxLength(30),
+    //   complex: complexPassword
+    // },
+    // confirm_password: {
+    //   required: required,
+    //   sameAs: sameAs("password")
+    // },
+    edit_fname: {
+      required: required,
+      maxLength: maxLength(30)
+    },
+    edit_lname: {
+      required: required,
+      maxLength: maxLength(30)
+    },
+    edit_email: {
+      required: required,
+      email: email,
+      maxLength: maxLength(40)
+    },
+    edit_phone: {
+      required: required,
+      phone: phone,
+      maxLength: maxLength(10)
+    },
+    edit_age: {
+      required: required,
+      maxLength: maxLength(2),
+      integer: integer
+    },
+    edit_dob: {
+      required: required
+    },
+    edit_gender: {
+      required: required
+    },
+    edit_address: {
+      required: required,
+      maxLength: maxLength(200)
+    },
+    edit_id_card: {
+      required: required,
+      minLength: minLength(13),
+      maxLength: maxLength(13),
+      integer: integer
+    },
+    edit_driving_lc: {
+      required: required,
+      minLength: minLength(8),
+      maxLength: maxLength(8),
+      integer: integer
+    }
   },
   methods: {
     getUserDetail() {
@@ -350,11 +558,13 @@ export default {
   height: 300px;
 }
 .leftSide.card-title {
-  font-size: 22px;
+  font-size: 19px;
 }
 .leftSide.card-img-top {
   width: 150px;
+  height: 150px;
   margin: 0 auto;
+  object-fit: cover;
 }
 
 .leftSideBottom.card {
@@ -388,8 +598,8 @@ export default {
   width: 100px;
 }
 .imageCard {
-  width: 240px;
-  height: 240px;
+  width: 208px;
+  height: 208px;
   object-fit: cover;
 }
 </style>

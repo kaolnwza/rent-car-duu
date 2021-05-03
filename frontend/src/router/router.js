@@ -31,7 +31,7 @@ const router = new VueRouter({
         { path: '/LoaneeRentingCar', component: LoaneeRentingCar },
         { path: '/ViewUserProfile', component: ViewUserProfile },
         { path: '/RentCar', component: RentCar },
-        { path: '/', redirect: '/Home' }
+        { path: '/', redirect: '/CarMarketplace' }
 
     ],
     mode: 'history',

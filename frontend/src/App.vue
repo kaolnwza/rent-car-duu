@@ -1,13 +1,21 @@
 <template>
-  <div id="app" class="m-0">
+  <div id="app" class="m-0 container-fluid">
     <Navbar />
-    <div class="container mt-4">
-      <LoginModal />
-      <RegisterModal />
-      <!--<CarDetailModal /> -->
-      <!-- <ViewUserProfile /> -->
-      <!--  <RentCar /> -->
-      <router-view></router-view>
+
+    <div class="row">
+      <div class="col-2">
+        <SideBar />
+      </div>
+      <div class="col-8">
+        <div class="container mt-4">
+          <LoginModal />
+          <RegisterModal />
+          <!--<CarDetailModal /> -->
+          <!-- <ViewUserProfile /> -->
+          <!--  <RentCar /> -->
+          <router-view></router-view>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -16,6 +24,7 @@
 import Navbar from "./components/Navbar.vue";
 import LoginModal from "./components/LoginModal.vue";
 import RegisterModal from "./components/RegisterModal.vue";
+import SideBar from "./components/SideBar.vue";
 //import CarDetailModal from "./components/CarDetailModal.vue";
 //import ViewUserProfile from "./components/ViewUserProfile";
 //import RentCar from "./components/RentCar";
@@ -25,15 +34,15 @@ export default {
   components: {
     Navbar,
     LoginModal,
-    RegisterModal
+    RegisterModal,
+    SideBar
     //CarDetailModal,
     //ViewUserProfile,
     //RentCar
   },
   data() {
     return {
-      test: true,
-      kuy: this.$loginStatus
+      test: true
     };
   },
   methods: {
@@ -41,18 +50,13 @@ export default {
       this.$testZa = "haha+";
     }
   },
-  watched: {
-    kuy() {
-      alert("asd");
-    }
-  }
+  watched: {}
 };
 </script>
 
 <style>
 #app {
   font-family: "Prompt", sans-serif;
-
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
