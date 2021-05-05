@@ -11,6 +11,7 @@
 
             <th scope="col">มือถือผู้ให้เช่า</th>
             <th scope="col">ราคา</th>
+            <th scope="col">วันที่ชำระเงิน</th>
 
             <th scope="col">วันที่รับรถ</th>
             <th scope="col">วันที่คืนรถ</th>
@@ -25,6 +26,7 @@
 
             <td>{{item.phone}}</td>
             <td>{{item.total_price}}</td>
+            <td>{{item.transaction_date}}</td>
 
             <td>{{item.s_date}}</td>
             <td>{{item.e_date}}</td>

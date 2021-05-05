@@ -20,14 +20,6 @@
             <label class="text_label">Profile</label>
           </td>
         </tr>
-        <tr @click="$router.push('/PaymentHistory')">
-          <td>
-            <fa icon="industry" class="iconStyle fa-lg" />
-          </td>
-          <td>
-            <label class="text_label">Payment History</label>
-          </td>
-        </tr>
       </table>
       <hr />
     </div>
@@ -82,6 +74,14 @@
             <label class="text_label">Loanee History</label>
           </td>
         </tr>
+        <tr @click="$router.push('/PaymentHistory')">
+          <td>
+            <fa icon="industry" class="iconStyle fa-lg" />
+          </td>
+          <td>
+            <label class="text_label">Payment History</label>
+          </td>
+        </tr>
       </table>
       <hr />
     </div>
@@ -101,6 +101,7 @@
 }
 hr {
   width: 220px;
+  margin-top: 30px;
 }
 .inside {
   padding-left: 20px;

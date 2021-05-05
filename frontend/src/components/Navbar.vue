@@ -7,9 +7,10 @@
           style="text-align:left"
           @click="$router.push('/')"
         >ส่งพี่ไปเช่ารถดู๊</div>
+
         <div class="col-5 p-0" style="text-align: left; "></div>
         <div class="col-4 mt-2 text-right">
-          <div v-if="!this.$loginStatus">
+          <div v-if="loginStatus === 'false'">
             <label
               class="login btn btn-outline-primary mr-2"
               data-toggle="modal"
@@ -21,18 +22,27 @@
               data-target="#loginModal"
             >เข้าสู่ระบบ</label>
           </div>
-          <button v-else class="btn btn-outline-primary userLogo">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="currentColor"
-              class="bi bi-person-fill"
-              viewBox="0 0 16 16"
+          <div v-if="loginStatus === 'true'">
+            <button
+              class="btn btn-outline-primary userLogo"
+              @click="$router.push('/userprofile')"
+              style="margin-right: 7px;"
             >
-              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="currentColor"
+                class="bi bi-person-fill"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
+                />
+              </svg>
+            </button>
+            <button @click="logOut()" class="btn btn-outline-primary userLogo">ออกจากระบบ</button>
+          </div>
         </div>
       </div>
     </div>
@@ -40,17 +50,34 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
+  //props: ["loginStatus"],
   data() {
     return {
-      logedIn: this.$loginStatus
+      loginStatus: "nnn"
     };
   },
+  mounted() {
+    this.getLoginStatus();
+  },
   methods: {
-    testLogedIn: function() {
-      this.logedIn = this.$loginStatus = !this.$loginStatus;
-      this.logedIn;
-      //console.log(this.$loginStatus);
+    getLoginStatus() {
+      this.loginStatus = localStorage.getItem("login_status");
+      console.log(this.loginStatus);
+    },
+    logOut() {
+      axios
+        .put("http://localhost:3000/logout")
+        .then(res => {
+          localStorage.setItem("login_status", false);
+          this.loginStatus = false;
+          this.$router.go(this.$router.currentRoute);
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };

@@ -61,7 +61,12 @@ router.get('/checkLocal', (req, res) => {
 
         access_token: localStorage.getItem('access_token'),
         image_path: localStorage.getItem('image_path'),
-        select_user: localStorage.getItem('select_user')
+        select_user: localStorage.getItem('select_user'),
+        edit_car_image: localStorage.getItem('edit_car_image'),
+        add_car_image: localStorage.getItem('add_car_image'),
+        edit_user_image: localStorage.getItem('edit_user_image'),
+        payment_image: localStorage.getItem('payment_image'),
+
     })
 
 })

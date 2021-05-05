@@ -23,8 +23,12 @@ router.get('/selectUser/:user', async (req, res) => {
     }
 
     catch (error) {
+        console.log(err);
         await conn.rollback()
         res.json(error)
+    } finally {
+
+        conn.release();
     }
 })
 
@@ -62,7 +66,12 @@ router.get('/selectUser/vehicle/:vehicleID', async (req, res) => {
     }
 
     catch (error) {
+        console.log(err);
+        await conn.rollback();
         res.json(error)
+    } finally {
+
+        conn.release();
     }
 })
 
@@ -100,7 +109,12 @@ router.get('/selectUser/vehicle/renting/:vehicleID', authToken.tranfer, async (r
     }
 
     catch (error) {
+        console.log(error);
+        await conn.rollback()
         res.json(error)
+    } finally {
+
+        conn.release();
     }
 })
 
@@ -121,8 +135,12 @@ router.get("/allCar", async (req, res, next) => {
         await conn.commit()
 
     } catch (error) {
+        console.log(error);
         await conn.rollback();
         res.json(error)
+    } finally {
+
+        conn.release();
     }
 
 
@@ -138,17 +156,20 @@ router.get('/search/:data', async (req, res) => {
 
     try {
 
-        const searchList = await conn.query('SELECT * FROM vehicle WHERE model LIKE ? ',
-            ['%' + data + '%'])
+        const searchList = await conn.query('SELECT * FROM vehicle WHERE model LIKE ? && status = ?',
+            ['%' + data + '%', 0])
 
 
 
         res.json(searchList[0])
         await conn.commit()
     } catch (error) {
-        conn.rollback()
+        await conn.rollback()
         console.log(error);
 
+    } finally {
+
+        conn.release();
     }
 
 })

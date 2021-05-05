@@ -100,6 +100,9 @@ router.post('/user/signup', async (req, res, next) => {
 
         return res.json(err)
         //res.send(error)
+    } finally {
+
+        conn.release();
     }
 
 

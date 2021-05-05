@@ -19,10 +19,18 @@
                   data-target="#editModalUser"
                   @click="makeEditModel(userDetail)"
                 >Edit Profile</button>
+                <button
+                  class="btn btn-outline-primary mt-2"
+                  @click="$modal.show('changePasswordModal')"
+                >Change Password</button>
               </div>
             </div>
           </div>
         </div>
+        <changePWModal />
+        <!-- change password modal -->
+
+        <!-- end change password modal -->
         <!-- 
         <div class="leftSideBottom card">
           <div class="leftSideBottom card-body">
@@ -372,6 +380,7 @@
 </template>
 
 <script>
+import changePWModal from "./ChangePasswordModal";
 import axios from "axios";
 import {
   required,
@@ -400,33 +409,24 @@ export default {
       images: "",
       userImage: "",
 
-      edit_fname: "",
-      edit_lname: "",
-      edit_phone: "",
-      edit_age: "",
-      edit_dob: "",
-      edit_gender: "",
-      edit_id_card: "",
-      edit_driving_lc: "",
-      edit_address: "",
-      edit_email: "",
-      edit_image: "",
+      edit_fname: "a",
+      edit_lname: "a",
+      edit_phone: "a",
+      edit_age: "a",
+      edit_dob: "a",
+      edit_gender: "a",
+      edit_id_card: "a",
+      edit_driving_lc: "a",
+      edit_address: "a",
+      edit_email: "a",
+      edit_image: "CarImage/image-1620058609385.jpg",
 
       edit_password: "",
       edit_confirm_password: ""
     };
   },
+  components: { changePWModal },
   validations: {
-    // password: {
-    //   required: required,
-    //   minLength: minLength(8),
-    //   maxLength: maxLength(30),
-    //   complex: complexPassword
-    // },
-    // confirm_password: {
-    //   required: required,
-    //   sameAs: sameAs("password")
-    // },
     edit_fname: {
       required: required,
       maxLength: maxLength(30)
@@ -486,6 +486,24 @@ export default {
       });
     },
 
+    changePassword() {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        const data = {
+          input_password: this.old_password,
+          new_password: this.new_password
+        };
+        axios
+          .put(`http://localhost:3000/changePassword`, data)
+          .then(res => {
+            alert("Change Password Success!");
+            console.log(res.data);
+          })
+          .catch(() => {
+            alert("Old Password Invalid");
+          });
+      }
+    },
     makeEditModel() {
       this.edit_fname = this.userDetail.fname;
       this.edit_lname = this.userDetail.lname;
@@ -520,29 +538,34 @@ export default {
         });
     },
     saveEdit() {
+      this.$v.$touch();
       var userID = this.userDetail.username;
+      if (!this.$v.$invalid) {
+        const data = {
+          fname: this.edit_fname,
+          lname: this.edit_lname,
+          email: this.edit_email,
+          address: this.edit_address,
+          age: this.edit_age,
+          phone: this.edit_phone,
+          gender: this.edit_gender,
+          dob: this.edit_dob,
+          id_card: this.edit_id_card,
+          driving_lc: this.edit_driving_lc,
 
-      const data = {
-        fname: this.edit_fname,
-        lname: this.edit_lname,
-        email: this.edit_email,
-        address: this.edit_address,
-        age: this.edit_age,
-        phone: this.edit_phone,
-        gender: this.edit_gender,
-        dob: this.edit_dob,
-        id_card: this.edit_id_card,
-        driving_lc: this.edit_driving_lc,
+          image_path: this.edit_image
+        };
 
-        image_path: this.edit_image
-      };
-
-      axios
-        .put(`http://localhost:3000/editUser/${userID}`, data)
-        .then(alert("EDIT SUCCESS"), this.$router.go(this.$router.currentRoute))
-        .catch(err => {
-          alert(err);
-        });
+        axios
+          .put(`http://localhost:3000/editUser/${userID}`, data)
+          .then(
+            alert("EDIT SUCCESS"),
+            this.$router.go(this.$router.currentRoute)
+          )
+          .catch(err => {
+            alert(err);
+          });
+      }
     }
   },
   mounted() {
@@ -555,7 +578,7 @@ export default {
 .leftSide.card {
   padding-top: 20px;
   width: 300px;
-  height: 300px;
+  height: 350px;
 }
 .leftSide.card-title {
   font-size: 19px;
@@ -601,5 +624,12 @@ export default {
   width: 208px;
   height: 208px;
   object-fit: cover;
+}
+.invalid-feedback.invalidFeedbackStyle {
+  text-align: left;
+  font-size: 11px;
+
+  padding: 0px;
+  margin: 0px;
 }
 </style>

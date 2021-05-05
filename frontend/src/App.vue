@@ -1,6 +1,6 @@
 <template>
-  <div id="app" class="m-0 container-fluid">
-    <Navbar />
+  <div id="app" class="m-0">
+    <Navbar @loginStatus="loginStatus" />
 
     <div class="row">
       <div class="col-2">
@@ -42,12 +42,19 @@ export default {
   },
   data() {
     return {
-      test: true
+      test: true,
+      loginStatus: false
     };
   },
   methods: {
     haha: function() {
       this.$testZa = "haha+";
+    },
+    getLoginStatus(val) {
+      //alert("asd");
+      this.loginStatus = val;
+      console.log(val);
+      console.log("asd", this.loginStatus);
     }
   },
   watched: {}

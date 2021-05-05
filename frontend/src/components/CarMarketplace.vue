@@ -9,7 +9,9 @@
         :userDetail="userDetail"
         name="cardetail"
       />
+
       <RentCar :carDetail="carDetail" :userDetail="userDetail" name="rentcar" />
+
       <div class="row">
         <label class="titleLabel col-9 text-left">
           Available Car
@@ -93,19 +95,23 @@
                   <div class="text-right mb-1">
                     <label class="priceLabel">{{item.r_price}}</label> บาท/วัน
                   </div>
-                  <button
-                    class="btn btn-outline-primary btnSize"
-                    data-toggle="modal"
-                    data-target="#ViewUserProfile"
-                    style="margin-right: 190px;"
-                    @click="selectingUser(item.loaner_user_username)"
-                  >โปรไฟล์ผู้ให้เช่า</button>
-                  <button
-                    class="btn btn-outline-danger btnSize"
-                    data-toggle="modal"
-                    data-target="#RentCar"
-                    @click="getCarDetailForRent(item.vehicle_id)"
-                  >เช่า</button>
+                  <label v-if="myUsername != item.loaner_user_username">
+                    <button
+                      class="btn btn-outline-primary btnSize"
+                      data-toggle="modal"
+                      data-target="#ViewUserProfile"
+                      style="margin-right: 190px;"
+                      @click="selectingUser(item.loaner_user_username)"
+                    >โปรไฟล์ผู้ให้เช่า</button>
+                  </label>
+                  <label v-if="myUsername != item.loaner_user_username">
+                    <button
+                      class="btn btn-outline-danger btnSize"
+                      data-toggle="modal"
+                      data-target="#RentCar"
+                      @click="getCarDetailForRent(item.vehicle_id)"
+                    >เช่า</button>
+                  </label>
                   <button
                     class="btn btn-outline-primary btnSize ml-2"
                     data-toggle="modal"
@@ -183,15 +189,24 @@ export default {
       vehicleListTestBackup: [],
       error: null,
       searchBox: "",
-      temp: "asdasd"
+      temp: "asdasd",
+      loginStatus: "",
+      myUsername: ""
     };
   },
   mounted() {
     this.getBlogDetail();
+    this.getMyUsername();
 
+    this.loginStatus = localStorage.getItem("login_status");
     //console.log(this.vehicleListTest[0].model);
   },
   methods: {
+    getMyUsername() {
+      axios.get(`http://localhost:3000/getUserDetail`).then(res => {
+        this.myUsername = res.data.username;
+      });
+    },
     getBlogDetail() {
       axios
         .get(`http://localhost:3000/allCar`)
@@ -233,18 +248,22 @@ export default {
         });
     },
     getCarDetailForRent(selectedUser) {
-      axios
-        .get(`http://localhost:3000/selectUser/vehicle/renting/${selectedUser}`)
-        .then(res => {
-          console.log(res.data);
+      if (this.loginStatus) {
+        axios
+          .get(
+            `http://localhost:3000/selectUser/vehicle/renting/${selectedUser}`
+          )
+          .then(res => {
+            console.log(res.data);
 
-          this.carDetail = res.data.vehicle;
-          this.insurDetail = res.data.insurance;
-          this.userDetail = res.data.user;
-        })
-        .catch(err => {
-          alert(err.res.data.message);
-        });
+            this.carDetail = res.data.vehicle;
+            this.insurDetail = res.data.insurance;
+            this.userDetail = res.data.user;
+          })
+          .catch(err => {
+            alert(err.res.data.message);
+          });
+      }
     },
     searchCar() {
       if (this.searchBox != "") {

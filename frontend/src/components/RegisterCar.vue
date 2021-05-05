@@ -148,6 +148,7 @@
                     v-model="$v.carPrice.$model"
                     :class="{'is-invalid': $v.carPrice.$error}"
                     placeholder="ex. 2000"
+                    type="number"
                   />
                   <div
                     class="invalid-feedback invalidFeedbackStyle"
@@ -157,6 +158,10 @@
                     class="invalid-feedback invalidFeedbackStyle"
                     v-if="!$v.carPrice.maxLength"
                   >จำนวนตัวอักษรมากเกินไป</div>
+                  <div
+                    class="invalid-feedback invalidFeedbackStyle"
+                    v-if="!$v.carPrice.integer"
+                  >ต้องเป็นจำนวนเต็มเท่านั้น</div>
                 </td>
               </tr>
             </tbody>
@@ -268,8 +273,8 @@ import axios from "axios";
 import {
   required,
   minLength,
-  maxLength
-  //integer
+  maxLength,
+  integer
 } from "vuelidate/lib/validators";
 export default {
   data() {
@@ -308,7 +313,8 @@ export default {
     },
     carPrice: {
       required: required,
-      maxLength: maxLength(8)
+      maxLength: maxLength(8),
+      integer: integer
     },
     carInsurDesc: {
       required: required,
@@ -332,6 +338,7 @@ export default {
     selectImages(event) {
       this.images = event.target.files;
     },
+
     addCar() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
@@ -356,14 +363,13 @@ export default {
       console.log("addimage method");
 
       let formData = new FormData();
-      formData.append("title", "test");
-      formData.append("status", "01");
+
       this.images.forEach(image => {
         formData.append("image", image);
       });
 
       axios
-        .post(`http://localhost:3000/submitImage`, formData)
+        .post(`http://localhost:3000/submitImage/add_car_image`, formData)
         .then(res => {
           this.currentImage = res.data.image;
           this.uploadStatus = "uploaded";

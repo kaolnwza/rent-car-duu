@@ -3,40 +3,121 @@ const pool = require("../config");
 const authToken = require('./authToken')
 const path = require('path')
 const multer = require('multer')
+const Joi = require('joi')
 router = express.Router();
 
 
 
-
+//loaner
 router.get("/myCarDetail", authToken.tranfer, async (req, res, next) => {
 
-    const username = req.token.username;
+    const myUsername = req.token.username;
 
-    const promise1 = pool.query("SELECT v.*, i.* FROM vehicle v JOIN insurance i ON (v.vehicle_id = vehicle_vehicle_id) WHERE loaner_user_username = ?", [username]);
+    const conn = await pool.getConnection();
+    await conn.beginTransaction()
 
-    // res.json(promise1[0]);
+    try {
+        // const carDetail = await conn.query("SELECT v.*, i.* FROM vehicle v JOIN insurance i ON (v.vehicle_id = vehicle_vehicle_id) \
+        // WHERE loaner_user_username = ?", [myUsername]);
 
 
-    Promise.all([promise1])
-        .then((results) => {
-            const [vehicle, blogFields] = results[0];
+        const loaneeCarDetail = await conn.query('SELECT r.status `renting_status`, r.renting_id, v.*, i.*, u.username, u_loanee.fname, u_loanee.lname, \
+        DATE_FORMAT(vr.s_date, "%Y-%m-%d") `s_date`, \
+        DATE_FORMAT(vr.e_date, "%Y-%m-%d") `e_date` FROM vehicle v \
+        JOIN insurance i ON (v.vehicle_id = i.vehicle_vehicle_id)\
+        JOIN user u ON (v.loaner_user_username = u.username) \
+        LEFT OUTER JOIN vehicle_renting vr ON (v.vehicle_id = vr.item_no)  \
+        LEFT OUTER JOIN renting r ON (vr.renting_renting_id = r.renting_id)  \
+        LEFT OUTER JOIN user u_loanee ON (u_loanee.username = r.loanee_user_username)  \
+        WHERE u.username = ?  ', [myUsername])
 
-            res.json({
-                vehicle: vehicle,
-                error: null,
-            });
-        })
-        .catch((err) => {
-            return res.status(500).json(err);
+
+
+        await conn.commit()
+        res.json({
+            //vehicle: carDetail[0],
+            vehicle: loaneeCarDetail[0],
+            error: null,
         });
+
+
+
+
+        // res.json(promise1[0]);
+    }
+
+
+    catch (err) {
+        res.json(err)
+        await conn.rollback()
+        console.log(err);
+
+        //return res.status(500).json(err);
+    } finally {
+
+        conn.release();
+    }
 
 })
 
+//loanee
+router.get("/loaneeCarDetail", authToken.tranfer, async (req, res, next) => {
+
+    const myUsername = req.token.username;
+
+    const conn = await pool.getConnection();
+    await conn.beginTransaction()
+
+    try {
+
+
+        const carDetail = await conn.query('SELECT r.renting_id, v.*, i.*, u.fname, u.lname, u.phone, DATE_FORMAT(vr.s_date, "%Y-%m-%d") `s_date`, DATE_FORMAT(vr.e_date, "%Y-%m-%d") `e_date`, r.total_price FROM vehicle v \
+    JOIN insurance i ON (v.vehicle_id = i.vehicle_vehicle_id)\
+    JOIN vehicle_renting vr ON (v.vehicle_id = vr.item_no) \
+    JOIN renting r ON (r.renting_id = vr.renting_renting_id) \
+    JOIN loaner lr ON (v.loaner_user_username = lr.user_username) \
+    JOIN user u ON (u.username = lr.user_username)\
+    WHERE (r.loanee_user_username = ?) && (r.status!=?)', [myUsername, '1'])
+
+        await conn.commit()
+        res.json(carDetail[0])
+
+    } catch (error) {
+        console.log(error);
+        await conn.rollback();
+    }
+    finally {
+
+        conn.release();
+    }
+
+
+})
+
+const signupVehicleSchema = Joi.object({
+    carModel: Joi.string().required().max(66),
+    carType: Joi.string().required(),
+    carRegNo: Joi.string().required().min(5).max(8),
+    carLocation: Joi.string().required().max(255),
+    carPrice: Joi.number().required().integer().max(99999999),
+    carInsurDesc: Joi.string().required().max(255),
+    carInsurType: Joi.string().required()
+
+})
 
 router.post('/addCar', authToken.tranfer, async function (req, res, next) {
-    const conn = await pool.getConnection()
-    // Begin transaction
 
+    try {
+        await signupVehicleSchema.validateAsync(req.body, { abourtEarly: false })
+    }
+    catch (err) {
+        console.log(err);
+
+        return res.status(400).json(err)
+    }
+
+
+    const conn = await pool.getConnection()
     await conn.beginTransaction();
     var carModel = req.body.carModel;
     var carType = req.body.carType;
@@ -49,7 +130,7 @@ router.post('/addCar', authToken.tranfer, async function (req, res, next) {
     var carInsurDesc = req.body.carInsurDesc
     var carInsurType = req.body.carInsurType;
 
-    var imgPath = localStorage.getItem('image_path')
+    var imgPath = localStorage.getItem('add_car_image')
 
     try {
 
@@ -78,7 +159,8 @@ router.post('/addCar', authToken.tranfer, async function (req, res, next) {
         await conn.rollback();
         console.log(err);
 
-        return res.status(500).json(err)
+
+        //return res.status(500).json(err)
 
     } finally {
         console.log('finally')
@@ -131,11 +213,37 @@ router.delete('/deleteCar/:vehicleID', authToken.tranfer, async (req, res) => {
         console.log(err);
         await conn.rollback();
     }
+    finally {
+
+        conn.release();
+    }
+
+})
+
+
+const editVehicleSchema = Joi.object({
+    model: Joi.string().required().max(66),
+    vehicle_type: Joi.string().required(),
+    plate_num: Joi.string().required().min(5).max(8),
+    current_location: Joi.string().required().max(255),
+    r_price: Joi.number().required().integer().max(99999999),
+    insurance_description: Joi.string().required().max(255),
+    insurance_type: Joi.string().required(),
+    image_path: Joi.string()
 
 })
 
 router.put('/editCar/:vehicleID', async (req, res) => {
     console.log('ion');
+
+    try {
+        await editVehicleSchema.validateAsync(req.body, { abourtEarly: false })
+    }
+    catch (err) {
+        console.log(err);
+
+        return res.status(400).json(err)
+    }
 
     var vehicleID = req.params.vehicleID;
 
@@ -149,7 +257,7 @@ router.put('/editCar/:vehicleID', async (req, res) => {
     var carInsurDesc = req.body.insurance_description;
     var carInsurType = req.body.insurance_type;
 
-    var imagePath = localStorage.getItem('image_path');
+    var imagePath = req.body.image_path;
 
     console.log(vehicleID);
     console.log(imagePath);
@@ -180,6 +288,10 @@ router.put('/editCar/:vehicleID', async (req, res) => {
         console.log(err);
 
     }
+    finally {
+
+        conn.release();
+    }
 
 
 
@@ -203,8 +315,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-router.post('/submitImage', upload.single('image'), async (req, res) => {
-
+router.post('/submitImage/:imageLocation', upload.single('image'), async (req, res) => {
+    const imageLocate = req.params.imageLocation;
 
     const file = req.file.destination + '/' + req.file.filename;
     if (!file) {
@@ -221,9 +333,9 @@ router.post('/submitImage', upload.single('image'), async (req, res) => {
     const pinned = req.body.pinned;
 
 
-    localStorage.setItem('image_path', file.substring(9))
+    localStorage.setItem(imageLocate, file.substring(9))
 
-    res.json({ image: localStorage.getItem('image_path') })
+    res.json({ image: localStorage.getItem(imageLocate) })
 
 
 })
@@ -255,6 +367,9 @@ router.put('/confirmLoaneePayment/:vehicleID', async (req, res) => {
 
         res.json(error)
 
+    } finally {
+
+        conn.release();
     }
 })
 

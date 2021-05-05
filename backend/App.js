@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser');
 const cors = require('cors')
-const morgan = require('morgan')
+//const morgan = require('morgan')
 const path = require('path')
 const { LocalStorage } = require('node-localstorage')
 
@@ -11,7 +11,7 @@ const app = express()
 
 
 
-app.use(morgan('combine'))
+//app.use(morgan('combine'))
 app.use(bodyParser.json())
 app.use(cors())
 
@@ -30,6 +30,7 @@ const renting = require('./router/renting')
 const carMarketplace = require('./router/carMarketplace')
 const userRoute = require('./router/user')
 const historyRoute = require('./router/history')
+const paymentRoute = require('./router/payment')
 
 app.use(testRoute.router)
 app.use(carRoute.router)
@@ -39,6 +40,7 @@ app.use(renting.router)
 app.use(carMarketplace.router)
 app.use(userRoute.router)
 app.use(historyRoute.router)
+app.use(paymentRoute.router)
 
 
 

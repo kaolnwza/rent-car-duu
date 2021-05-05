@@ -10,6 +10,22 @@
           </button>
         </label>
       </div>
+      <!-- show car image modal -->
+      <modal name="showCarImage" :width="'40%'" :height="'40%'" :adaptive="true">
+        <img
+          :src="'http://localhost:3000/'+vehicleList[selectingVehicle].image_path"
+          alt
+          style="max-width:100%;"
+        />
+      </modal>
+      <!-- end show car image -->
+
+      <!-- show car image modal -->
+      <modal name="showPayment" :width="'30%'" :height="'75%'" :adaptive="true">
+        <img :src="'http://localhost:3000/'+payment_data.image_path" alt style="max-width:100%;" />
+      </modal>
+      <!-- end show car image -->
+
       <hr style="margin-top: 0px; margin-bottom: 20px;  " />
       <div class="row" style="padding-left: 30px;">
         <div class="col" v-for="(item, index) in vehicleList" :key="index">
@@ -50,8 +66,8 @@
                             class="badge badge-warning carDetail secondTd"
                             style="margin-right: 6px;"
                           >Loanee</span>
-                          <span v-if="item.f_name">{{item.f_name + ' ' + item.l_name}}</span>
-                          <span v-if="!item.f_name">No Loanee</span>
+                          <span v-if="item.fname">{{item.fname + ' ' + item.lname}}</span>
+                          <span v-if="!item.fname">No Loanee</span>
                         </div>
                       </td>
                     </tr>
@@ -63,7 +79,16 @@
                           {{item.plate_num}}
                         </div>
                       </td>
-                      <td></td>
+                      <td>
+                        <div class="carDes text-dark">
+                          <span
+                            class="badge badge-warning carDetail secondTd"
+                            style="margin-right: 6px;"
+                          >Renting ID</span>
+                          <span v-if="item.renting_id">{{item.renting_id }}</span>
+                          <span v-if="!item.renting_id"></span>
+                        </div>
+                      </td>
                     </tr>
                     <!-- third row -->
                     <tr>
@@ -104,12 +129,11 @@
                         </div>
                       </td>
                       <td>
-                        <div
-                          class="carDes text-dark"
-                          v-if="item.status!=0"
-                          style="padding-top:16px"
-                        >
-                          <!-- <span class="btn btn-outline-primary userDetail secondTd">View Loanee Detail</span> -->
+                        <div class="carDes text-dark pt-3">
+                          <span
+                            class="btn btn-outline-primary userDetail secondTd"
+                            @click="showCarImageFn(index)"
+                          >Car Image</span>
                         </div>
                       </td>
                     </tr>
@@ -121,10 +145,11 @@
                         </div>
                       </td>
                       <td>
-                        <div class="carDes text-dark" v-if="item.status!=0">
+                        <div class="carDes text-dark" v-if="item.renting_status==0">
                           <span
                             class="btn btn-outline-primary userDetail secondTd"
-                          >View Loanee Detail</span>
+                            @click="getPaymentDetail(item.renting_id)"
+                          >Payment Detail</span>
                         </div>
                       </td>
                     </tr>
@@ -392,7 +417,7 @@ td {
   text-align: left;
 }
 .secondTd {
-  margin-left: 120px;
+  margin-left: 60px;
 }
 .rightSideButton {
   padding-top: 185px;
@@ -439,7 +464,9 @@ export default {
       current_vehicleID: "",
       currentImage: "",
       images: "",
-      uploadStatus: ""
+      uploadStatus: "",
+      selectingVehicle: "0",
+      payment_data: ""
     };
   },
   mounted() {
@@ -458,6 +485,21 @@ export default {
         .catch(error => {
           this.error = error.response.data.message;
         });
+    },
+    getPaymentDetail(rentingID) {
+      axios
+        .get(`http://localhost:3000/paymentDetail/${rentingID}`)
+        .then(res => {
+          this.payment_data = res.data;
+          this.$modal.show("showPayment");
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    showCarImageFn(index) {
+      this.selectingVehicle = index;
+      this.$modal.show("showCarImage");
     },
     deleteCar(vehicleID, index) {
       const result = confirm(
@@ -533,7 +575,7 @@ export default {
       });
 
       axios
-        .post(`http://localhost:3000/submitImage`, formData)
+        .post(`http://localhost:3000/submitImage/edit_car_image`, formData)
         .then(res => {
           this.currentImage = res.data.image;
           this.uploadStatus = "uploaded";

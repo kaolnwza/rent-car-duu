@@ -17,15 +17,21 @@ router.get('/getUserDetail', authToken.tranfer, async (req, res) => {
     const conn = await pool.getConnection()
     await conn.beginTransaction()
 
-    const userWhat = req.params.userWhat;
+    //const userWhat = req.params.userWhat;
 
     try {
         const user = await conn.query('SELECT *  FROM user WHERE username =?', [currentUser])
 
         res.json(user[0][0])
-        conn.commit()
+        await conn.commit()
     } catch (error) {
-        res.json(err)
+        res.json(error)
+        console.log(error);
+
+        await rollback()
+    } finally {
+
+        conn.release();
     }
 
 
@@ -63,18 +69,18 @@ router.post('/submitUserImage', upload.single('image'), async (req, res) => {
     const pinned = req.body.pinned;
 
 
-    localStorage.setItem('image_path', file.substring(9))
+    localStorage.setItem('edit_user_image', file.substring(9))
 
-    res.json({ image: localStorage.getItem('image_path') })
+    res.json({ image: localStorage.getItem('edit_user_image') })
 
 
 })
 
-const signupSchema = Joi.object({
+const userEditSchema = Joi.object({
     email: Joi.string().email().max(40),
     phone: Joi.string().required().pattern(/0[0-9]{9}/).max(10),
-    f_name: Joi.string().required().max(30),
-    l_name: Joi.string().required().max(30),
+    fname: Joi.string().required().max(30),
+    lname: Joi.string().required().max(30),
 
     // password: Joi.string().required().custom(passwordValidator).min(8).max(30),
     // confirm_password: Joi.string().required().valid(Joi.ref('password')),
@@ -84,12 +90,21 @@ const signupSchema = Joi.object({
     gender: Joi.string().required(),
     address: Joi.string().required().max(200),
     id_card: Joi.string().required().min(13).max(13),
-    driving_lc: Joi.string().required().min(8).max(8)
+    driving_lc: Joi.string().required().min(8).max(8),
+    image_path: Joi.string()
 
 })
 router.put('/editUser/:userID', async (req, res) => {
     console.log(req.body);
 
+    try {
+        await userEditSchema.validateAsync(req.body, { abourtEarly: false })
+    }
+    catch (err) {
+        console.log(err);
+
+        return res.status(400).json(err)
+    }
 
     const username = req.params.userID
     // const password = await bcrypt.hash(req.body.password, 2)
@@ -128,6 +143,9 @@ router.put('/editUser/:userID', async (req, res) => {
         res.json(err)
         console.log(err);
         await conn.rollback();
+    } finally {
+
+        conn.release();
     }
 
 
