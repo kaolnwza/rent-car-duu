@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const { LocalStorage } = require('node-localstorage')
 const authToken = require('./authToken')
+const path = require('path')
+const multer = require('multer')
 
 
 require('dotenv').config()
@@ -153,6 +155,49 @@ router.put('/removeRenting/:rentingID', async (req, res) => { // dont needd
 })
 
 //router.use(lolza)
+
+
+
+//img
+const storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './static/PaymentImage')
+    },
+
+
+    filename: function (req, file, callback) {
+        callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    }
+})
+
+const upload = multer({ storage: storage })
+
+router.post('/submitPaymentImage/:imageLocation', upload.single('image'), async (req, res) => {
+    const imageLocate = req.params.imageLocation;
+
+    const file = req.file.destination + '/' + req.file.filename;
+    if (!file) {
+        const error = new Error("Please upload a file");
+        error.httpStatusCode = 400;
+        console.log('Fucking ERROR');
+
+    }
+
+
+    const title = req.body.title;
+    const content = req.body.content;
+    const status = req.body.status;
+    const pinned = req.body.pinned;
+
+
+    localStorage.setItem(imageLocate, file.substring(9))
+
+    res.json({ image: localStorage.getItem(imageLocate) })
+
+
+})
+
+
 
 
 exports.router = router;

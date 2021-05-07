@@ -67,7 +67,7 @@ router.post('/user/login', async (req, res, next) => {
             localStorage.setItem('access_token', accessToken)
             loginStatus = true
 
-            res.json({ accessToken: accessToken, fname: user.fname, lname: user.lname, loginStatus: loginStatus })
+            res.json({ accessToken: accessToken, username: user.username, fname: user.fname, lname: user.lname, loginStatus: loginStatus })
 
         }
         else {

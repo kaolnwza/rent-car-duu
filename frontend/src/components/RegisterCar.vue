@@ -3,7 +3,7 @@
     <div class="card-body" style="padding-top:60px">
       <div class="row">
         <div class="col-4 text-center">
-          <div style="height: 400px;">
+          <div style="height: 400px;margin-top: 45px;">
             <img :src="'http://localhost:3000/'+this.currentImage" class="card imageCard" />
 
             <input
@@ -291,7 +291,8 @@ export default {
       testImg: ["1", "2"],
       imageUploaded: false,
       currentImage: "CarImage/upload.png",
-      uploadStatus: ""
+      uploadStatus: "",
+      user_status: ""
     };
   },
   validations: {
@@ -328,6 +329,7 @@ export default {
     }
   },
   mounted() {
+    this.getUserDetail();
     //console.log(this.vehicleListTest[0].model);
     //this.callImage();
   },
@@ -338,24 +340,32 @@ export default {
     selectImages(event) {
       this.images = event.target.files;
     },
-
+    getUserDetail() {
+      axios.get("http://localhost:3000/getUserDetail").then(res => {
+        this.user_status = res.data.verify_status;
+      });
+    },
     addCar() {
-      this.$v.$touch();
-      if (!this.$v.$invalid) {
-        axios
-          .post(`http://localhost:3000/addCar`, {
-            carModel: this.carModel,
-            carType: this.carType,
-            carRegNo: this.carRegNo,
-            carLocation: this.carLocation,
-            carPrice: this.carPrice,
-            carInsurDesc: this.carInsurDesc,
-            carInsurType: this.carInsurType
-          })
-          .then(alert("Signup Car Complete"), this.$router.push("/managecar"))
-          .catch(err => {
-            this.err = err.response.data.message;
-          });
+      if (this.user_status == 1) {
+        this.$v.$touch();
+        if (!this.$v.$invalid) {
+          axios
+            .post(`http://localhost:3000/addCar`, {
+              carModel: this.carModel,
+              carType: this.carType,
+              carRegNo: this.carRegNo,
+              carLocation: this.carLocation,
+              carPrice: this.carPrice,
+              carInsurDesc: this.carInsurDesc,
+              carInsurType: this.carInsurType
+            })
+            .then(
+              alert("Signup Car Complete"),
+              this.$router.push("/managecar")
+            );
+        }
+      } else {
+        alert("You need to verify!");
       }
     },
 

@@ -60,18 +60,22 @@ export default {
   },
   mounted() {
     this.getLoginStatus();
+    //this.isAdmin();
   },
   methods: {
     getLoginStatus() {
       this.loginStatus = localStorage.getItem("login_status");
       console.log(this.loginStatus);
     },
+
     logOut() {
       axios
         .put("http://localhost:3000/logout")
         .then(res => {
+          localStorage.setItem("is_admin", false);
           localStorage.setItem("login_status", false);
           this.loginStatus = false;
+
           this.$router.go(this.$router.currentRoute);
           console.log(res.data);
         })

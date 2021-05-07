@@ -10,6 +10,10 @@
             alt="Card image cap"
           />
           <h5 class="leftSide card-title mt-3 mb-0">{{userDetail.fname + ' ' + userDetail.lname}}</h5>
+          <div class="m-0">
+            <div class="badge badge-success" v-if="userDetail.verify_status == '1'">Verified</div>
+            <div class="badge badge-warning" v-else>Wait for verify</div>
+          </div>
           <div class="leftSide card-body">
             <div class="row">
               <div class="col-12">
@@ -578,7 +582,7 @@ export default {
 .leftSide.card {
   padding-top: 20px;
   width: 300px;
-  height: 350px;
+  height: 360px;
 }
 .leftSide.card-title {
   font-size: 19px;

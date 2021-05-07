@@ -331,7 +331,7 @@ export default {
       });
 
       axios
-        .post(`http://localhost:3000/submitImage/payment_image`, formData)
+        .post(`http://localhost:3000/submitPaymentImage/payment_image`, formData)
         .then(res => {
           alert("Upload Success!");
           console.log("uploaded");

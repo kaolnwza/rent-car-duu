@@ -60,6 +60,8 @@ router.post('/user/signup', async (req, res, next) => {
         await signupSchema.validateAsync(req.body, { abourtEarly: false })
     }
     catch (err) {
+        console.log(err);
+
         return res.status(400).json(err)
     }
 

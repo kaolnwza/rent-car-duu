@@ -7,6 +7,7 @@
           class="form-control inputBox"
           style="width: 300px;"
           v-model="old_password"
+          type="password"
           :class="{'is-invalid': passwordInvalid}"
         />
         <hr
@@ -18,6 +19,7 @@
             class="form-control inputBox"
             style="width: 300px;"
             v-model="$v.new_password.$model"
+            type="password"
             :class="{'is-invalid' : $v.new_password.$error}"
           />
           <div
@@ -44,6 +46,7 @@
           <input
             class="form-control inputBox"
             style="width: 300px;"
+            type="password"
             v-model="$v.new_confirm_password.$model"
             :class="{'is-invalid' : $v.new_confirm_password.$error}"
           />
@@ -111,6 +114,7 @@ export default {
           .put(`http://localhost:3000/changePassword`, data)
           .then(res => {
             alert("Change Password Success!");
+            this.$router.go(this.$router.currentRoute);
             console.log(res.data);
           })
           .catch(() => {

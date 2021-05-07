@@ -411,7 +411,7 @@ export default {
 
             alert("Signup Complete");
 
-            this.$router.push("/carmarketplace");
+            this.$router.go(this.$router.currentRoute);
           })
           .catch(err => {
             alert(err.response.data.details.message);

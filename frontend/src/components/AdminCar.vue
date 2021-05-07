@@ -3,7 +3,7 @@
     <div class="card-body">
       <div class="row">
         <label class="titleLabel col-9 text-left">
-          Manage Car
+          Admin Car Managing
           <button class="btn btn-warning" @click="$router.push('/registercar')">
             <fa icon="plus" />
             <span class="ml-1">เพิ่มรถ</span>
@@ -36,7 +36,7 @@
                   <tbody>
                     <tr>
                       <td colspan="2">
-                        <span class="carTitle">{{item.model}}</span>
+                        <span class="carTitle">{{item.model}} #{{item.vehicle_id}}</span>
 
                         <span class="badge badge-danger ml-2" v-if="item.status == 2">กำลังเช่า</span>
                         <span class="badge badge-success ml-2" v-if="item.status == 0">ว่าง</span>
@@ -66,7 +66,7 @@
                             class="badge badge-warning carDetail secondTd"
                             style="margin-right: 6px;"
                           >Loanee</span>
-                          <span v-if="item.renting_status == 0">{{item.fname + ' ' + item.lname}}</span>
+                          <span v-if="item.renting_status==0">{{item.fname + ' ' + item.lname}}</span>
                           <span v-else>No Loanee</span>
                         </div>
                       </td>
@@ -85,8 +85,7 @@
                             class="badge badge-warning carDetail secondTd"
                             style="margin-right: 6px;"
                           >Renting ID</span>
-                          <span style v-if="item.renting_status == 0">{{item.renting_id }}</span>
-                          <span v-if="!item.renting_id"></span>
+                          <span v-if="item.renting_status == 0">{{item.renting_id }}</span>
                         </div>
                       </td>
                     </tr>
@@ -482,14 +481,14 @@ export default {
   methods: {
     getCarDetail() {
       axios
-        .get(`http://localhost:3000/myCarDetail`)
+        .get(`http://localhost:3000/adminCar`)
         .then(response => {
-          this.vehicleList = response.data.vehicle;
+          this.vehicleList = response.data;
 
           console.log(this.vehicleList);
         })
         .catch(error => {
-          this.error = error.response.data.message;
+          this.error = error.response.data;
         });
     },
     getPaymentDetail(rentingID) {

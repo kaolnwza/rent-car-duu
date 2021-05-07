@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-1"></div>
         <div class="col-3 text-center">
-          <div style="height: 200px;width:200px">
+          <div style="height: 200px;width:200px; ">
             <img class="card imageCard" src />
 
             <button class="btn btn-outline-primary mt-3" style="font-weight: 400;">Add Image</button>

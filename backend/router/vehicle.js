@@ -29,7 +29,7 @@ router.get("/myCarDetail", authToken.tranfer, async (req, res, next) => {
         LEFT OUTER JOIN vehicle_renting vr ON (v.vehicle_id = vr.item_no)  \
         LEFT OUTER JOIN renting r ON (vr.renting_renting_id = r.renting_id)  \
         LEFT OUTER JOIN user u_loanee ON (u_loanee.username = r.loanee_user_username)  \
-        WHERE u.username = ?  ', [myUsername])
+        WHERE u.username = ? AND (r.status = ? OR r.status IS NULL) ', [myUsername, '0'])
 
 
 
@@ -106,6 +106,8 @@ const signupVehicleSchema = Joi.object({
 })
 
 router.post('/addCar', authToken.tranfer, async function (req, res, next) {
+
+
 
     try {
         await signupVehicleSchema.validateAsync(req.body, { abourtEarly: false })
@@ -357,6 +359,7 @@ router.put('/confirmLoaneePayment/:vehicleID', async (req, res) => {
 
 
         await conn.query('UPDATE vehicle SET status=? WHERE vehicle_id=?', ['2', vehicleID])
+
 
         await conn.commit()
         res.json('success')

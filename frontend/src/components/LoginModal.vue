@@ -110,7 +110,15 @@ export default {
               this.$modal.show("helloMes");
 
               localStorage.setItem("login_status", true);
-              console.log(res.data);
+              localStorage.setItem("is_admin", false);
+              console.log(res.data.username);
+
+              if (res.data.username == "admin") {
+                console.log("in");
+
+                localStorage.setItem("is_admin", true);
+              }
+              console.log("admin" + localStorage.getItem("is_admin"));
             }
           })
           .catch(() => {

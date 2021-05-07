@@ -12,6 +12,8 @@ import ManageCar from '../components/ManageCar'
 import LoaneeRentingCar from '../components/LoaneeRentingCar'
 import ViewUserProfile from '../components/ViewUserProfile'
 import RentCar from '../components/RentCar'
+import AdminCar from '../components/AdminCar'
+import AdminUser from '../components/AdminUser'
 
 Vue.use(VueRouter)
 
@@ -31,6 +33,8 @@ const router = new VueRouter({
         { path: '/LoaneeRentingCar', component: LoaneeRentingCar },
         { path: '/ViewUserProfile', component: ViewUserProfile },
         { path: '/RentCar', component: RentCar },
+        { path: '/AdminCar', component: AdminCar },
+        { path: '/AdminUser', component: AdminUser },
         { path: '/', redirect: '/CarMarketplace' }
 
     ],

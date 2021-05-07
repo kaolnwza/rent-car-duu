@@ -31,6 +31,7 @@ const carMarketplace = require('./router/carMarketplace')
 const userRoute = require('./router/user')
 const historyRoute = require('./router/history')
 const paymentRoute = require('./router/payment')
+const adminPanelRoute = require('./router/adminPanel')
 
 app.use(testRoute.router)
 app.use(carRoute.router)
@@ -41,6 +42,7 @@ app.use(carMarketplace.router)
 app.use(userRoute.router)
 app.use(historyRoute.router)
 app.use(paymentRoute.router)
+app.use(adminPanelRoute.router)
 
 
 
